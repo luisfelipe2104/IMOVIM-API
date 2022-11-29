@@ -1,11 +1,11 @@
-import mysql2 from 'mysql2/promise'
+import mysql from 'mysql2/promise'
 
 const connect = async () => {
-    const connection = await mysql2.createConnection({
+    const connection = await mysql.createConnection({
         host: 'localhost',
-        port: 3006,
+        port: 3306,
         user: 'root',
-        password: '',
+        password: '0262',
         database: 'Imovim'
     })
     return connection
