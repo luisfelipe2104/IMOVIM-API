@@ -19,4 +19,14 @@ async function createUser(nickname, email, password, birthday) {
     conn.end()
 }
 
-export default { createUser, checkExistingUser }
+async function login(email) {
+    const conn = await db.connect()
+    const sql = 'SELECT * FROM Users WHERE email =?'
+
+    const row = await conn.query(sql, [email])
+    conn.end()
+
+    return row[0]
+}
+
+export default { createUser, checkExistingUser, login }
