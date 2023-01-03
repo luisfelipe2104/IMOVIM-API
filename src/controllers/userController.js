@@ -50,7 +50,7 @@ routes.post("/create-user", async (req, res) => {
 })
 
 // user/login
-routes.get("/login", async (req, res) => {
+routes.post("/login", async (req, res) => {
     const {email, password} = req.body
 
     // search for the user in the database
