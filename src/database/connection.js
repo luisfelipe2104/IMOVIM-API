@@ -17,7 +17,7 @@ export default { connect }
         // port: 3306,
         // user: 'root',
         // password: '',
-        // database: 'Imovim'
+        // database: 'imovim'
 
         // host: 'bwlxd3avicainricfhd5-mysql.services.clever-cloud.com',
         // port: 3306,

@@ -1,6 +1,8 @@
-CREATE DATABASE IF NOT EXISTS Imovim;
+CREATE DATABASE IF NOT EXISTS imovim;
 
-USE Imovim;
+# DROP DATABASE imovim;
+
+USE imovim;
 
 CREATE TABLE IF NOT EXISTS Users(
 	id int primary key auto_increment,
@@ -11,13 +13,22 @@ CREATE TABLE IF NOT EXISTS Users(
     created_at datetime default now()
 );
 
-create table UserLikesPost(
+
+create table Posts(
 	id int primary key auto_increment,
-    user_id int not null,
+    author varchar(255) not null,
+	caption text,
+	created_at datetime default now() not null,
+	image varchar(255)
+);
+
+CREATE TABLE IF NOT EXISTS UserLikesPost(
+	id int primary key auto_increment,
+    user_nickname varchar(30) not null,
     post_id int not null,
 	
-    constraint user_ID foreign key(user_id) references Users(id),
-    constraint post_ID foreign key(post_id) references Post(id)
+    constraint user_Nickname foreign key(user_nickname) references Users(nickname),
+    constraint post_ID foreign key(post_id) references Posts(id)
 );
 
 SELECT * FROM Users;
