@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS Users(
 );
 
 
-create table Posts(
+CREATE TABLE IF NOT EXISTS Posts(
 	id int primary key auto_increment,
     author varchar(255) not null,
 	caption text,

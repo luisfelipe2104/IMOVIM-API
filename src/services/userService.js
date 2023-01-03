@@ -29,12 +29,4 @@ async function login(email) {
     return row[0]
 }
 
-export async function likePost(nickname, post_id) {
-    const conn = await db.connect()
-    const sql = 'INSERT INTO UserLikesPost(user_nickname, post_id) VALUES (?, ?)'
-    const data = [nickname, post_id]
-    await conn.query(sql, data)
-    conn.end()
-}
-
-export default { createUser, checkExistingUser, login, likePost }
+export default { createUser, checkExistingUser, login }

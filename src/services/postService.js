@@ -50,8 +50,39 @@ export async function getPostsByAuthor(author) {
     return rows
 }
 
-export async function getNumOfLikes(){
-    pass
+
+export async function likePost(nickname, post_id) {
+    const conn = await db.connect()
+    const sql = 'INSERT INTO UserLikesPost(user_nickname, post_id) VALUES (?, ?)'
+    const data = [nickname, post_id]
+    await conn.query(sql, data)
+    conn.end()
 }
 
-export default { createPost, getPost, allPosts, updatePost, getPostsByAuthor }
+export async function unlikePost(nickname, post_id) {
+    const conn = await db.connect()
+    const sql = 'DELETE FROM UserLikesPost WHERE user_nickname =? AND post_id =?'
+    const data = [nickname, post_id]
+    await conn.query(sql, data)
+    conn.end()
+}
+
+export async function checkUserLikedPost(nickname, post_id) {
+    const conn = await db.connect()
+    const sql = 'SELECT * FROM UserLikesPost WHERE user_nickname =? AND post_id =?'
+    const data = [nickname, post_id]
+    const rows = await conn.query(sql, data)
+    conn.end()
+    return rows[0]
+}
+
+export async function getNumOfLikes(id){
+    const conn = await db.connect()
+    const sql = 'SELECT COUNT(*) likes FROM UserLikesPost WHERE post_id = ?'
+    const data = [id]
+    const row = await conn.query(sql, data)
+    conn.end()
+    return row[0]
+}
+
+export default { createPost, getPost, allPosts, updatePost, getPostsByAuthor, likePost, unlikePost, checkUserLikedPost, getNumOfLikes }
