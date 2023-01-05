@@ -8,6 +8,8 @@ const routes = express.Router()
 routes.post("/create-user", async (req, res) => {
     const {nickname, email, password, birthday} = req.body
     
+    if (!nickname || !email || !password || !birthday) return res.status(400).json({ msg: 'Insira todos os dados!'})
+
     // checks if the user already exists
     const checkUser = await db.checkExistingUser(nickname, email)
     let invalid = false
@@ -52,6 +54,8 @@ routes.post("/create-user", async (req, res) => {
 // user/login
 routes.post("/login", async (req, res) => {
     const {email, password} = req.body
+
+    if (!email || !password) return res.status(400).json({ msg: 'Insira todos os dados!'})
 
     // search for the user in the database
     const user = await db.login(email)
