@@ -34,9 +34,9 @@ routes.post('/like-post', async (req, res) => {
     }
 })
 
-// post/get-num-likes
-routes.post('/get-num-likes', async (req, res) => {
-    const { post_id } = req.body
+// post/get-num-likes/:id
+routes.post('/get-num-likes/:id', async (req, res) => {
+    const post_id = req.params.id
     try{
         const numLikes = await db.getNumOfLikes(post_id)
         return res.status(200).json(numLikes)
