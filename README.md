@@ -26,17 +26,14 @@
 <section>
   <h2 align="center">Rotas programadas👩‍💻</h2>
   
-  <section>
-    <h3>/user</h3>
-    
-    <p>Essa rota da acesso a outras rotas:</p>
-    
-    <ul>
-      <li>/login</li>
-      <li>/create-user</li>
-    </ul>
-  </section>
-  
+  <h3>/user</h3>
+
+  <p>Essa rota da acesso a outras rotas:</p>
+
+  <ul>
+    <li>/login</li>
+    <li>/create-user</li>
+  </ul>  
   
   <h3>POST: /user/login</h3>
   <p>
