@@ -62,19 +62,37 @@ routes.post("/login", async (req, res) => {
   const user = await db.login(email);
 
   // case the user is not found in the database
-  if (!user.length)
-    return res.status(404).json({ msg: "Usuario não encontrado" });
+  if (!user.length) return res.status(404).json({ msg: "Usuario não encontrado" });
 
   // checks the password
   const userPassword = user[0].password;
   const isPasswordCorrect = bcrypt.compareSync(password, userPassword);
-  if (!isPasswordCorrect)
-    return res.status(400).json({ msg: "Senha ou email incorretos" });
+  if (!isPasswordCorrect) return res.status(400).json({ msg: "Senha ou email incorretos" });
+
+  let nickname = await db.getNicknameByEmail(email)
+  nickname = nickname.map((i) => {return i.nickname})[0]
+
+  let user_id = await db.getUserIdByEmail(email)
+  user_id = user_id.map((i) => {return i.id})[0]
 
   return res.status(200).json({
     msg: "Usuario logado com sucesso",
+    user_id,
+    nickname
   });
 });
+
+// user/get-all-users
+routes.get('/get-all-users', async (req, res) => {
+  try{
+    const users = await db.getAllUsers();
+    return res.status(200).json(users);
+  } catch (err) {
+    return res.status(500).json({
+      msg: err.message,
+    });
+  }
+})
 
 // user/get-userId-by-email
 routes.post("/get-userId-by-email", async (req, res) => {

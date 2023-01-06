@@ -29,6 +29,16 @@ async function login(email) {
     return row[0]
 }
 
+async function getAllUsers() {
+    const conn = await db.connect()
+    const sql = 'SELECT * FROM Users'
+
+    const row = await conn.query(sql)
+    conn.end()
+
+    return row[0]
+}
+
 async function getUserIdByName(name) {
     const conn = await db.connect()
     const sql = 'SELECT id FROM Users WHERE nickname =?'
@@ -49,7 +59,7 @@ async function getUserIdByEmail(email) {
     return row[0]
 }
 
-async function getNicknameIdByEmail(email) {
+async function getNicknameByEmail(email) {
     const conn = await db.connect()
     const sql = 'SELECT nickname FROM Users WHERE email =?'
 
@@ -114,5 +124,6 @@ export default {
     getFollowersAmount,
     getFollowersList,
     getUserIdByEmail,
-    getNicknameIdByEmail
+    getNicknameByEmail,
+    getAllUsers
 }
