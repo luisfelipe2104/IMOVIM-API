@@ -1,9 +1,9 @@
 import db from '../database/connection.js'
 
-export async function createPost(author, caption, image) {
+export async function createPost(user_id, caption, image) {
     const conn = await db.connect()
-    const sql = 'INSERT INTO Posts(author, caption, image) VALUES(?, ?, ?)'
-    const data = [author, caption, image]
+    const sql = 'INSERT INTO Posts(user_id, caption, image) VALUES(?, ?, ?)'
+    const data = [user_id, caption, image]
     await conn.query(sql, data)
     await conn.end()
 }
@@ -17,12 +17,20 @@ export async function getPost(id) {
     return row[0]
 }
 
-export async function allPosts() {
+export async function getAllPosts() {
     const conn = await db.connect()
-    const sql = 'SELECT * FROM Posts'
+    const sql = 'SELECT nickname, caption, image, p.created_at, (SELECT COUNT(*) FROM UserLikesPost WHERE post_id = p.id) AS likes FROM Posts p JOIN Users u ON u.id = user_id ORDER BY likes DESC'
     const rows = await conn.query(sql)
     conn.end()
-    return rows
+    return rows[0]
+}
+
+export async function getPostsOfFollowing(user_id) {
+    const conn = await db.connect()
+    const sql = 'SELECT nickname, caption, image, p.created_at, (SELECT COUNT(*) FROM UserLikesPost WHERE post_id = p.id) AS likes FROM Posts p JOIN Users u ON u.id = user_id WHERE user_id IN (SELECT user_id FROM UserFollowing WHERE follower_id = ?) ORDER BY likes DESC'
+    const rows = await conn.query(sql, [user_id])
+    conn.end()
+    return rows[0]
 }
 
 export async function deletePost(id) {
@@ -41,36 +49,35 @@ export async function updatePost(id, caption, image) {
     await conn.end()
 }
 
-export async function getPostsByAuthor(author) {
+export async function getPostsByAuthor(user_id) {
     const conn = await db.connect()
-    const sql = 'SELECT * FROM Posts WHERE author =?'
-    const data = [author]
+    const sql = 'SELECT * FROM Posts WHERE user_id =?'
+    const data = [user_id]
     const rows = await conn.query(sql, data)
     conn.end()
     return rows
 }
 
-
-export async function likePost(nickname, post_id) {
+export async function likePost(user_id, post_id) {
     const conn = await db.connect()
-    const sql = 'INSERT INTO UserLikesPost(user_nickname, post_id) VALUES (?, ?)'
-    const data = [nickname, post_id]
+    const sql = 'INSERT INTO UserLikesPost(user_id, post_id) VALUES (?, ?)'
+    const data = [user_id, post_id]
     await conn.query(sql, data)
     conn.end()
 }
 
 export async function unlikePost(nickname, post_id) {
     const conn = await db.connect()
-    const sql = 'DELETE FROM UserLikesPost WHERE user_nickname =? AND post_id =?'
+    const sql = 'DELETE FROM UserLikesPost WHERE user_id =? AND post_id =?'
     const data = [nickname, post_id]
     await conn.query(sql, data)
     conn.end()
 }
 
-export async function checkUserLikedPost(nickname, post_id) {
+export async function checkUserLikedPost(user_id, post_id) {
     const conn = await db.connect()
-    const sql = 'SELECT * FROM UserLikesPost WHERE user_nickname =? AND post_id =?'
-    const data = [nickname, post_id]
+    const sql = 'SELECT * FROM UserLikesPost WHERE user_id =? AND post_id =?'
+    const data = [user_id, post_id]
     const rows = await conn.query(sql, data)
     conn.end()
     return rows[0]
@@ -85,4 +92,4 @@ export async function getNumOfLikes(id){
     return row[0]
 }
 
-export default { createPost, getPost, allPosts, updatePost, getPostsByAuthor, likePost, unlikePost, checkUserLikedPost, getNumOfLikes }
+export default { createPost, getPost, getAllPosts, updatePost, getPostsByAuthor, likePost, unlikePost, checkUserLikedPost, getNumOfLikes, getPostsOfFollowing }
