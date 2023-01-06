@@ -19,7 +19,7 @@ export async function getPost(id) {
 
 export async function getAllPosts() {
     const conn = await db.connect()
-    const sql = 'SELECT nickname, caption, image, p.created_at, (SELECT COUNT(*) FROM UserLikesPost WHERE post_id = p.id) AS likes FROM Posts p JOIN Users u ON u.id = user_id ORDER BY likes DESC'
+    const sql = 'SELECT p.id, nickname, caption, image, p.created_at, (SELECT COUNT(*) FROM UserLikesPost WHERE post_id = p.id) AS likes FROM Posts p JOIN Users u ON u.id = user_id ORDER BY likes DESC'
     const rows = await conn.query(sql)
     conn.end()
     return rows[0]
@@ -27,7 +27,7 @@ export async function getAllPosts() {
 
 export async function getPostsOfFollowing(user_id) {
     const conn = await db.connect()
-    const sql = 'SELECT nickname, caption, image, p.created_at, (SELECT COUNT(*) FROM UserLikesPost WHERE post_id = p.id) AS likes FROM Posts p JOIN Users u ON u.id = user_id WHERE user_id IN (SELECT user_id FROM UserFollowing WHERE follower_id = ?) ORDER BY likes DESC'
+    const sql = 'SELECT p.id, nickname, caption, image, p.created_at, (SELECT COUNT(*) FROM UserLikesPost WHERE post_id = p.id) AS likes FROM Posts p JOIN Users u ON u.id = user_id WHERE user_id IN (SELECT user_id FROM UserFollowing WHERE follower_id = ?) ORDER BY likes DESC'
     const rows = await conn.query(sql, [user_id])
     conn.end()
     return rows[0]

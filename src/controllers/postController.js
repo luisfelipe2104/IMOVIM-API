@@ -45,12 +45,21 @@ routes.post('/get-num-likes/:id', async (req, res) => {
     }
 })
 
-// post/get-all-posts/:id
-routes.post('/get-all-posts/:id', async (req, res) => {
+// post/get-posts-of-friends/:id  (id = user_id)
+routes.post('/get-posts-of-friends/:id', async (req, res) => {
     const user_id = req.params.id
     try{
-        let posts = await db.getPostsOfFollowing(user_id)
-        if (!posts.length) posts = await db.getAllPosts()
+        const posts = await db.getPostsOfFollowing(user_id)
+        return res.status(200).json(posts)
+    } catch (err) {
+        return res.status(500).json({ msg: err.message})
+    }
+})
+
+// post/get-all-posts
+routes.post('/get-all-posts', async (req, res) => {
+    try{
+        const posts = await db.getAllPosts()
         return res.status(200).json(posts)
     } catch (err) {
         return res.status(500).json({ msg: err.message})
