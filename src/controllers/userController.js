@@ -1,6 +1,7 @@
 import express from "express";
 import bcrypt from "bcrypt";
 import db from "../services/userService.js";
+import { createProfile } from "../services/profileService.js";
 
 const routes = express.Router();
 
@@ -8,8 +9,7 @@ const routes = express.Router();
 routes.post("/create-user", async (req, res) => {
   const { nickname, email, password, birthday, phoneNumber } = req.body;
 
-  if (!nickname || !email || !password || !birthday)
-    return res.status(400).json({ msg: "Insira todos os dados!" });
+  if (!nickname || !email || !password || !birthday) return res.status(400).json({ msg: "Insira todos os dados!" });
 
   // checks if the user already exists
   const checkUser = await db.checkExistingUser(nickname, email);
@@ -40,8 +40,13 @@ routes.post("/create-user", async (req, res) => {
       // creates the user
       await db.createUser(nickname, email, hash, birthday, phoneNumber);
 
+      let user_id = await db.getUserIdByEmail(email);
+      user_id = user_id.map((i) => {return i.id})[0]
+
+      await createProfile(user_id)
+
       return res.status(201).json({
-        msg: "Usuario cadastrado com sucesso",
+        msg: "Usuario cadastrado com sucesso"
       });
     } catch (err) {
       res.status(500).json({
@@ -55,8 +60,7 @@ routes.post("/create-user", async (req, res) => {
 routes.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
-  if (!email || !password)
-    return res.status(400).json({ msg: "Insira todos os dados!" });
+  if (!email || !password) return res.status(400).json({ msg: "Insira todos os dados!" });
 
   // search for the user in the database
   const user = await db.login(email);
