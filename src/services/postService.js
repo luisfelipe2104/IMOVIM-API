@@ -10,7 +10,7 @@ export async function createPost(user_id, caption, image) {
 
 export async function getPost(id) {
     const conn = await db.connect()
-    const sql = 'SELECT * FROM Posts WHERE id =?'
+    const sql = 'SELECT * FROM PostView WHERE id =?'
     const data = [id]
     const row = await conn.query(sql, data)
     conn.end()
@@ -19,7 +19,8 @@ export async function getPost(id) {
 
 export async function getAllPosts() {
     const conn = await db.connect()
-    const sql = 'SELECT p.id, nickname, caption, image, p.created_at, (SELECT COUNT(*) FROM UserLikesPost WHERE post_id = p.id) AS likes FROM Posts p JOIN Users u ON u.id = user_id ORDER BY likes DESC'
+    // const sql = 'SELECT p.id, nickname, caption, image, p.created_at, (SELECT COUNT(*) FROM UserLikesPost WHERE post_id = p.id) AS likes FROM Posts p JOIN Users u ON u.id = user_id ORDER BY likes DESC'
+    const sql = 'SELECT * FROM PostView'
     const rows = await conn.query(sql)
     conn.end()
     return rows[0]
@@ -27,7 +28,8 @@ export async function getAllPosts() {
 
 export async function getPostsOfFollowing(user_id) {
     const conn = await db.connect()
-    const sql = 'SELECT p.id, nickname, caption, image, p.created_at, (SELECT COUNT(*) FROM UserLikesPost WHERE post_id = p.id) AS likes FROM Posts p JOIN Users u ON u.id = user_id WHERE user_id IN (SELECT user_id FROM UserFollowing WHERE follower_id = ?) ORDER BY likes DESC'
+    // const sql = 'SELECT p.id, nickname, caption, image, p.created_at, (SELECT COUNT(*) FROM UserLikesPost WHERE post_id = p.id) AS likes FROM Posts p JOIN Users u ON u.id = user_id WHERE user_id IN (SELECT user_id FROM UserFollowing WHERE follower_id = ?) ORDER BY likes DESC'
+    const sql = 'SELECT * FROM PostView WHERE user_id IN (SELECT user_id FROM UserFollowing WHERE follower_id = ?)'
     const rows = await conn.query(sql, [user_id])
     conn.end()
     return rows[0]
@@ -49,10 +51,10 @@ export async function updatePost(id, caption, image) {
     await conn.end()
 }
 
-export async function getPostsByAuthor(user_id) {
+export async function getPostsByAuthor(nickname) {
     const conn = await db.connect()
-    const sql = 'SELECT * FROM Posts WHERE user_id =?'
-    const data = [user_id]
+    const sql = 'SELECT * FROM PostView WHERE nickname =?'
+    const data = [nickname]
     const rows = await conn.query(sql, data)
     conn.end()
     return rows
