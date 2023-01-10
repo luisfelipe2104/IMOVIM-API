@@ -49,4 +49,24 @@ routes.post('/update-profile-location', async (req, res) => {
     }
 })
 
+routes.delete('/delete-profile-img/:id', async (req, res) => {
+    const user_id = req.params.id
+    try{
+        await db.removeProfileImage(user_id)
+        return res.status(200).json({ msg: "Imagem de Perfil Removida!"})
+    } catch (err) {
+        return res.status(500).json({ error: err.message, msg: "erro ao remover a imagem de perfil" })
+    }
+})
+
+routes.delete('/delete-cover/:id', async (req, res) => {
+    const user_id = req.params.id
+    try{
+        await db.removeProfileBackground(user_id)
+        return res.status(200).json({ msg: "Cover removido!"})
+    } catch (err) {
+        return res.status(500).json({ error: err.message, msg: "erro ao remover o cover"})
+    }
+})
+
 export default routes

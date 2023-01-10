@@ -39,10 +39,26 @@ async function updateProfileLocation(user_id, location) {
     conn.end()
 }
 
+async function removeProfileImage(user_id) {
+    const conn = await db.connect()
+    const sql = 'UPDATE Profile SET profileImage =null WHERE user_id =?'
+    await conn.query(sql, [user_id])
+    conn.end()
+}
+
+async function removeProfileBackground(user_id) {
+    const conn = await db.connect()
+    const sql = 'UPDATE Profile SET profileBackground =null WHERE user_id =?'
+    await conn.query(sql, [user_id])
+    conn.end()
+}
+
 export default { 
     createProfile, 
     updateProfileImage, 
     updateProfileBackground, 
     updateProfileDescription, 
-    updateProfileLocation 
+    updateProfileLocation ,
+    removeProfileImage, 
+    removeProfileBackground
 }
