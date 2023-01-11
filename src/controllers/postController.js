@@ -35,7 +35,7 @@ routes.post('/like-post', async (req, res) => {
 })
 
 // post/get-num-likes/:id
-routes.post('/get-num-likes/:id', async (req, res) => {
+routes.get('/get-num-likes/:id', async (req, res) => {
     const post_id = req.params.id
     try{
         const numLikes = await db.getNumOfLikes(post_id)
@@ -46,10 +46,11 @@ routes.post('/get-num-likes/:id', async (req, res) => {
 })
 
 // post/get-posts-of-friends/:id  (id = user_id)
-routes.post('/get-posts-of-friends/:id', async (req, res) => {
+routes.get('/get-posts-of-friends/:id', async (req, res) => {
     const user_id = req.params.id
     try{
         const posts = await db.getPostsOfFollowing(user_id)
+        if(!posts.length) return res.status(200).json({ msg: "Não há posts de amigos" })
         return res.status(200).json(posts)
     } catch (err) {
         return res.status(500).json({ msg: err.message})
@@ -57,12 +58,45 @@ routes.post('/get-posts-of-friends/:id', async (req, res) => {
 })
 
 // post/get-all-posts
-routes.post('/get-all-posts', async (req, res) => {
+routes.get('/get-all-posts', async (req, res) => {
     try{
         const posts = await db.getAllPosts()
         return res.status(200).json(posts)
     } catch (err) {
         return res.status(500).json({ msg: err.message})
+    }
+})
+
+// post/get-posts-of-user/:id
+routes.get('/get-posts-of-user/:id', async (req, res) => {
+    const user_id = req.params.id
+    try {
+        const posts = await db.getPostsOfUser(user_id)
+        return res.status(200).json(posts)
+    } catch(err) {
+        return res.status(500).json({ msg: err.message})
+    }
+})
+
+// post/update-post
+routes.post('/update-post', async (req, res) => {
+    const { post_id, user_id, caption, image } = req.body
+    try {
+        await db.updatePost(post_id, user_id, caption, image)
+        return res.status(200).json({ msg: 'Post atualizado!' })
+    } catch(err) {
+        return res.status(500).json({ err: err.message, msg: 'Erro ao atualizar o post' })
+    }
+})
+
+// post;/delete-post?id=2&user=3
+routes.delete('/delete-post', async (req, res) => {
+    const { id, user } = req.query
+    try {
+        await db.deletePost(id, user)
+        return res.status(200).json({ msg: 'Post deletado!' })
+    } catch(err) {
+        return res.status(500).json({ msg: 'Erro ao deletear o post', err: err.message })
     }
 })
 
