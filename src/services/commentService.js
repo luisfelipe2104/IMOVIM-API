@@ -18,4 +18,25 @@ async function getCommentsOfPost(post_id) {
     return results[0]
 }
 
-export default { createComment, getCommentsOfPost }
+async function deleteComment(comment_id, user_id) {
+    const conn = await db.connect()
+    const sql = 'DELETE FROM Comments WHERE id = ? AND user_id = ?'
+    const data = [comment_id, user_id]
+    await conn.query(sql, data)
+    conn.end()
+}
+
+async function updateComment(comment, comment_id, user_id) {
+    const conn = await db.connect()
+    const sql = 'UPDATE Comments SET comment = ?, updated = true WHERE id = ? AND user_id = ?'
+    const data = [comment, comment_id, user_id]
+    await conn.query(sql, data)
+    conn.end()
+}
+
+export default { 
+    createComment, 
+    getCommentsOfPost, 
+    deleteComment,
+    updateComment
+}
