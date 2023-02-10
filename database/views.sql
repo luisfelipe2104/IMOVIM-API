@@ -1,7 +1,7 @@
 USE imovim;
 SELECT * FROM UserLikesPost;
 -- DROP VIEW PostView;
-CREATE VIEW IF NOT EXISTS PostView AS
+CREATE VIEW PostView AS
 	SELECT p.id, nickname, caption, image, p.created_at, user_id, updated,
 	(SELECT COUNT(*) FROM UserLikesPost WHERE post_id = p.id) AS likes,
     (SELECT COUNT(*) FROM Comments WHERE post_id = p.id) AS comments,
@@ -11,9 +11,13 @@ CREATE VIEW IF NOT EXISTS PostView AS
 	JOIN Users u ON u.id = user_id 
 	ORDER BY likes DESC;
     
-CREATE VIEW IF NOT EXISTS CommentView AS
+CREATE VIEW CommentView AS
 	SELECT id, comment, created_at, post_id, updated,
 	(SELECT nickname FROM Users WHERE id = c.user_id) AS nickname, 
 	(SELECT profileImage FROM Profile p WHERE p.user_id = c.user_id) profileImage 
 	FROM Comments c;
     
+CREATE VIEW SportView AS
+	SELECT nickname, sport_name, user_id FROM UserPracticeSport JOIN 
+	Users u ON u.id = user_id
+	JOIN Sports s ON s.id = sport_id;

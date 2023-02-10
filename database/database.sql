@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS UserFollowing(
     constraint user_ID_tblUserFollowing foreign key(user_id) references Users(id),
     constraint follower_ID_tblUserFollowing foreign key(follower_id) references Users(id)
 );
-
+SELECT DAYOFWEEK('2023-01-19');
 CREATE TABLE IF NOT EXISTS Posts(
 	id int primary key auto_increment,
     user_id int not null,
@@ -66,4 +66,32 @@ CREATE TABLE IF NOT EXISTS Comments(
     
     constraint post_id_tblComments foreign key(post_id) references Posts(id),
     constraint user_id_tblComments foreign key(user_id) references Users(id)
+);
+
+CREATE TABLE IF NOT EXISTS Sports(
+	id int primary key,
+    sport_name varchar(50)
+);
+
+INSERT INTO Sports VALUES
+(1, "futebol"),
+(2, "basquete"),
+(3, "volei"),
+(4, "tenis"),
+(5, "dança"),
+(6, "natação"),
+(7, "handebol"),
+(8, "pingpong"),
+(9, "corrida"),
+(10, "judô"),
+(11, "musculação"),
+(12, "maratona");
+
+CREATE TABLE IF NOT EXISTS UserPracticeSport(
+	id int primary key auto_increment, 
+    user_id int not null,
+    sport_id int not null,
+    
+    constraint UserPracticeSport_userID foreign key(user_id) references Users(id),
+    constraint UserPracticeSport_sportID foreign key(sport_id) references Sports(id)
 );
