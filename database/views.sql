@@ -18,6 +18,7 @@ CREATE VIEW CommentView AS
 	FROM Comments c;
     
 CREATE VIEW SportView AS
-	SELECT nickname, sport_name, user_id FROM UserPracticeSport JOIN 
+	SELECT nickname, sport_name, user_id, sport_id FROM UserPracticeSport JOIN 
 	Users u ON u.id = user_id
 	JOIN Sports s ON s.id = sport_id;
+    
