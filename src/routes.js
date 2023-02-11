@@ -5,6 +5,7 @@ import commentRoutes from "./controllers/commentController.js"
 import profileRoutes from "./controllers/profileController.js"
 import authRoutes from "./controllers/authController.js"
 import sportsRoutes from "./controllers/sportsController.js"
+import eventRoutes from "./controllers/eventController.js"
 
 const routes = express()
 
@@ -14,5 +15,6 @@ routes.use("/post", postRoutes)
 routes.use("/comment", commentRoutes)
 routes.use("/profile", profileRoutes)
 routes.use("/sports", sportsRoutes)
+routes.use("/event", eventRoutes)
 
 export default routes
