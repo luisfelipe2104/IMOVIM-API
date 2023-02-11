@@ -34,12 +34,12 @@ CREATE TABLE IF NOT EXISTS UserFollowing(
     constraint user_ID_tblUserFollowing foreign key(user_id) references Users(id),
     constraint follower_ID_tblUserFollowing foreign key(follower_id) references Users(id)
 );
-SELECT DAYOFWEEK('2023-01-19');
+
 CREATE TABLE IF NOT EXISTS Posts(
 	id int primary key auto_increment,
     user_id int not null,
 	caption text,
-	created_at datetime default now() not null,
+	created_at date default now() not null,
 	image varchar(255),
     updated boolean default false,
     
@@ -95,3 +95,16 @@ CREATE TABLE IF NOT EXISTS UserPracticeSport(
     constraint UserPracticeSport_userID foreign key(user_id) references Users(id),
     constraint UserPracticeSport_sportID foreign key(sport_id) references Sports(id)
 );
+
+CREATE TABLE IF NOT EXISTS Events(
+	id int primary key auto_increment,
+    user_id int not null,
+    event_name varchar(100) not null,
+    event_date date not null,
+    event_hour time not null,
+    localization varchar(100) not null,
+    description text not null,
+    photo varchar(255),
+    
+    constraint events_userID foreign key(user_id) references Users(id)
+)
