@@ -4,6 +4,7 @@ CREATE DATABASE IF NOT EXISTS imovim;
 
 USE imovim;
 
+
 CREATE TABLE IF NOT EXISTS Users(
 	id int primary key auto_increment,
     nickname varchar(100) not null,
@@ -39,7 +40,8 @@ CREATE TABLE IF NOT EXISTS Posts(
 	id int primary key auto_increment,
     user_id int not null,
 	caption text,
-	created_at date default now() not null,
+    localization varchar(100),
+	created_at date DEFAULT (CURRENT_DATE) not null,
 	image varchar(255),
     updated boolean default false,
     
