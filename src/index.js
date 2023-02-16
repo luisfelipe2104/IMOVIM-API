@@ -9,7 +9,7 @@ config() // initializes the env variables
 const app = express()
 const PORT = process.env.PORT || 3333
 
-connect_MongoDB()
+await connect_MongoDB()
 
 app.use(express.json())
 app.use(cors())
