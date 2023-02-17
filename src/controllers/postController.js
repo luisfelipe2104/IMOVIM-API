@@ -18,6 +18,16 @@ routes.post('/create-post', async (req, res) => {
     }
 })
 
+routes.get('/get-post/:id', async (req, res) => {
+    const id = req.params.id
+    try {
+        const post = await db.getPost(id)
+        res.status(200).json(post)
+    } catch (err) {
+        res.status(500).json({ error: err.message})
+    }
+})
+
 // post/like-post
 routes.post('/like-post', async (req, res) => {
     const { post_id, user_id } = req.body
