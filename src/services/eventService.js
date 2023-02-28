@@ -8,4 +8,12 @@ async function createEvent(user_id, event_name, event_date, event_hour, localiza
     conn.end()
 }
 
-export default { createEvent }
+async function getEvents() {
+    const conn = await db.connect()
+    const sql = 'SELECT *, dayofweek(event_date) AS dayOfWeek FROM Events;'
+    const results = await conn.query(sql)
+    conn.end()
+    return results[0]
+}
+
+export default { createEvent, getEvents }

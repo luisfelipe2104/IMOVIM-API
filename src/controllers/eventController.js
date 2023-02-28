@@ -16,4 +16,13 @@ routes.post('/create-event', async (req, res) => {
     }
 })
 
+routes.get('/get-all-events', async (req, res) => {
+    try{
+        const events = await db.getEvents()
+        res.status(200).json(events)
+    } catch (err) {
+        res.status(400).json({ msg: err.message})
+    }
+})
+
 export default routes
