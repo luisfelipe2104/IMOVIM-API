@@ -22,3 +22,6 @@ CREATE VIEW SportView AS
 	Users u ON u.id = user_id
 	JOIN Sports s ON s.id = sport_id;
     
+CREATE VIEW ProfileView AS 
+	SELECT p.id, user_id, profileImage, profileBackground, description, localization, nickname 
+	FROM Profile p JOIN Users u ON u.id = user_id; 

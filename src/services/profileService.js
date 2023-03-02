@@ -53,6 +53,14 @@ async function removeProfileBackground(user_id) {
     conn.end()
 }
 
+async function getProfileInfo(user_id) {
+    const conn = await db.connect()
+    const sql = 'SELECT * FROM ProfileView WHERE user_id =?'
+    const results = await conn.query(sql, [user_id])
+    conn.end()
+    return results[0]
+}
+
 export default { 
     createProfile, 
     updateProfileImage, 
@@ -60,5 +68,6 @@ export default {
     updateProfileDescription, 
     updateProfileLocation ,
     removeProfileImage, 
-    removeProfileBackground
+    removeProfileBackground,
+    getProfileInfo
 }

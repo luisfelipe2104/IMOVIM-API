@@ -25,7 +25,7 @@ async function deleteSportPracticed(user_id, sport_id) {
     conn.end()
 }
 
-async function getSportsPracticed(user_id) {
+export async function getSportsPracticed(user_id) {
     const conn = await db.connect()
     const sql = 'SELECT * from SportView WHERE user_id = ?'
     const results = await conn.query(sql, [user_id])

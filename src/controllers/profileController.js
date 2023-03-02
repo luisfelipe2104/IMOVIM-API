@@ -1,5 +1,7 @@
 import db from '../services/profileService.js'
 import express from 'express'
+import { getPostsOfUser } from '../services/postService.js'
+import { getSportsPracticed } from '../services/sportsService.js'
 
 const routes = express.Router()
 
@@ -66,6 +68,18 @@ routes.delete('/delete-cover/:id', async (req, res) => {
         return res.status(200).json({ msg: "Cover removido!"})
     } catch (err) {
         return res.status(500).json({ error: err.message, msg: "erro ao remover o cover"})
+    }
+})
+
+routes.get('/get-profile-data/:id', async (req, res) => {
+    const user_id = req.params.id
+    try {
+        const profileInfo = await db.getProfileInfo(user_id)
+        const userPosts = await getPostsOfUser(user_id)
+        const sportsPracticed = await getSportsPracticed(user_id)
+        return res.status(200).json({ profileInfo, userPosts, sportsPracticed })
+    } catch (err) {
+        return res.status(500).json({ error: err.message })
     }
 })
 
