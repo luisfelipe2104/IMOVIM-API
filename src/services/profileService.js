@@ -53,7 +53,15 @@ async function removeProfileBackground(user_id) {
     conn.end()
 }
 
-async function getProfileInfo(user_id) {
+export async function getProfileImg(user_id) {
+    const conn = await db.connect()
+    const sql = 'SELECT profileImage FROM Profile where user_id =?'
+    const results = await conn.query(sql, [user_id])
+    conn.end()
+    return results[0]
+}
+
+export async function getProfileInfo(user_id) {
     const conn = await db.connect()
     const sql = 'SELECT * FROM ProfileView WHERE user_id =?'
     const results = await conn.query(sql, [user_id])
@@ -69,5 +77,6 @@ export default {
     updateProfileLocation ,
     removeProfileImage, 
     removeProfileBackground,
-    getProfileInfo
+    getProfileInfo,
+    getProfileImg
 }

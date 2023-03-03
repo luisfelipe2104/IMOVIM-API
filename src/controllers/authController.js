@@ -2,6 +2,8 @@ import express from 'express'
 import db from '../services/authService.js'
 import { createProfile } from "../services/profileService.js";
 import bcrypt from "bcrypt";
+import { getProfileImg } from '../services/profileService.js';
+import { getProfileInfo } from '../services/profileService.js';
 
 const routes = express.Router();
 
@@ -57,8 +59,8 @@ routes.post("/create-user", async (req, res) => {
 });
 
 // user/login
-routes.get("/login", async (req, res) => {
-  const { email, password } = req.query;
+routes.post("/login", async (req, res) => {
+  const { email, password } = req.body;
 
   if (!email || !password) return res.status(400).json({ msg: "Insira todos os dados!" });
 
@@ -72,17 +74,31 @@ routes.get("/login", async (req, res) => {
   const userPassword = user[0].password;
   const isPasswordCorrect = bcrypt.compareSync(password, userPassword);
   if (!isPasswordCorrect) return res.status(400).json({ msg: "Senha ou email incorretos" });
+  let profileData = await getProfileInfo(user[0].id)
+  // let nickname = await db.getNicknameByEmail(email)
+  // nickname = nickname.map((i) => {return i.nickname})[0]
 
-  let nickname = await db.getNicknameByEmail(email)
-  nickname = nickname.map((i) => {return i.nickname})[0]
+  // let user_id = await db.getUserIdByEmail(email)
+  // user_id = user_id.map((i) => {return i.id})[0]
 
-  let user_id = await db.getUserIdByEmail(email)
-  user_id = user_id.map((i) => {return i.id})[0]
+  // let profileImage = await getProfileImg(user_id)
+  // profileImage = profileImage.map((i) => {return i.profileImage})[0]
 
+  profileData = profileData.map((i) => {
+    return {
+      user_id: i.user_id,
+      nickname: i.nickname,
+      profileImage: i.profileImage
+    }
+  })
+  let user_id = profileData[0].user_id
+  let nickname = profileData[0].nickname
+  let profileImage = profileData[0].profileImage
   return res.status(200).json({
     msg: "Usuario logado com sucesso",
     user_id,
-    nickname
+    nickname,
+    profileImage
   });
 });
 
