@@ -1,4 +1,5 @@
 import db from '../database/connection.js'
+import { ProfileView } from '../../database/views.js'
 
 export async function createProfile(user_id) {
     const conn = await db.connect()
@@ -63,7 +64,7 @@ export async function getProfileImg(user_id) {
 
 export async function getProfileInfo(user_id) {
     const conn = await db.connect()
-    const sql = 'SELECT * FROM ProfileView WHERE user_id =?'
+    const sql = `${ProfileView} WHERE user_id =?`
     const results = await conn.query(sql, [user_id])
     conn.end()
     return results[0]

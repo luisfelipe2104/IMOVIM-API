@@ -24,7 +24,7 @@ routes.get('/get-post/:id', async (req, res) => {
         const post = await db.getPost(id)
         res.status(200).json(post)
     } catch (err) {
-        res.status(500).json({ error: err.message})
+        res.status(500).json({ error: err})
     }
 })
 

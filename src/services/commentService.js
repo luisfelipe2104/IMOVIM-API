@@ -1,4 +1,5 @@
 import db from '../database/connection.js'
+import { CommentView } from '../../database/views.js'
 
 async function createComment(comment, user_id, post_id) {
     const conn = await db.connect()
@@ -11,7 +12,7 @@ async function createComment(comment, user_id, post_id) {
 async function getCommentsOfPost(post_id) {
     const conn = await db.connect()
     // const sql = 'SELECT id, comment, created_at, (SELECT nickname FROM Users WHERE id = c.user_id) AS nickname, (SELECT profileImage FROM Profile p WHERE p.user_id = c.user_id) profileImage FROM Comments c WHERE post_id = ?'
-    const sql = 'SELECT * FROM CommentView WHERE post_id = ?'
+    const sql = `${CommentView} WHERE post_id = ?`
     const data = [post_id]
     const results = await conn.query(sql, data)
     conn.end()

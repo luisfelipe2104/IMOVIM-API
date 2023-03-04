@@ -36,6 +36,17 @@ CREATE TABLE IF NOT EXISTS UserFollowing(
     constraint follower_ID_tblUserFollowing foreign key(follower_id) references Users(id)
 );
 
+CREATE TABLE IF NOT EXISTS Friendship(
+	id int primary key auto_increment,
+    friend1 int not null,
+    friend2 int not null,
+    created_at datetime default now(),
+    pending boolean default true
+    
+    constraint friend1_tblFriendship foreign key(friend1) references Users(id),
+    constraint friend2_tblFriendship foreign key(friend2) references Users(id)
+);
+
 CREATE TABLE IF NOT EXISTS Posts(
 	id int primary key auto_increment,
     user_id int not null,
