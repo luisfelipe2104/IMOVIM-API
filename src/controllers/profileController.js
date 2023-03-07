@@ -93,4 +93,15 @@ routes.get('/get-profile-data/:id', async (req, res) => {
     }
 })
 
+routes.get('/get-editingProfile-data/:id', async (req, res) => {
+    const user_id = req.params.id
+    try {
+        const profileInfo = await db.getProfileInfo(user_id)
+        return res.status(200).json(profileInfo)
+    } catch (err) {
+        return res.status(500).json({ error: err.message })
+    }
+})
+
+
 export default routes
