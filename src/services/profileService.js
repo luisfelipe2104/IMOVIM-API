@@ -8,6 +8,14 @@ export async function createProfile(user_id) {
     conn.end()
 }
 
+async function updateProfile(user_id, image, background, localization) {
+    const conn = await db.connect()
+    const sql = 'UPDATE Profile SET profileImage =?, profileBackground =?, localization =? WHERE user_id =?'
+    const data = [image, background, localization, user_id]
+    await conn.query(sql, data)
+    conn.end()
+}
+
 async function updateProfileImage(user_id, image) {
     const conn = await db.connect()
     const sql = 'UPDATE Profile SET profileImage =? WHERE user_id =?'
@@ -79,5 +87,6 @@ export default {
     removeProfileImage, 
     removeProfileBackground,
     getProfileInfo,
-    getProfileImg
+    getProfileImg,
+    updateProfile
 }

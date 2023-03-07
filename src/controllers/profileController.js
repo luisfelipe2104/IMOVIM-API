@@ -5,6 +5,16 @@ import { getSportsPracticed } from '../services/sportsService.js'
 
 const routes = express.Router()
 
+routes.post('/update-profile', async (req, res) => {
+    const { user_id, image, background, localization } = req.body
+    try {
+        await db.updateProfile(user_id, image, background, localization)
+        res.status(200).json({ msg: "Perfil atualizado!" })
+    } catch (err) {
+        return res.status(500).json({ msg: err.message })
+    }
+})
+
 routes.post('/update-profile-img', async (req, res) => {
     const { image, user_id } = req.body
 
