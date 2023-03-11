@@ -15,6 +15,8 @@ CREATE TABLE IF NOT EXISTS Users(
     created_at datetime default now()
 );
 
+# INSERT INTO Users VALUES(DEFAULT, "TIago", "tiago@teste", "123123", "456456", "2004-10-15", DEFAULT);
+
 CREATE TABLE IF NOT EXISTS Profile(
 	id int primary key auto_increment,
     user_id int not null unique,
@@ -41,7 +43,7 @@ CREATE TABLE IF NOT EXISTS Friendship(
     friend1 int not null,
     friend2 int not null,
     created_at datetime default now(),
-    pending boolean default true
+    pending boolean default true,
     
     constraint friend1_tblFriendship foreign key(friend1) references Users(id),
     constraint friend2_tblFriendship foreign key(friend2) references Users(id)
@@ -52,7 +54,7 @@ CREATE TABLE IF NOT EXISTS Posts(
     user_id int not null,
 	caption text,
     localization varchar(100),
-	created_at date DEFAULT (CURRENT_DATE) not null,
+	created_at date not null,
 	image varchar(255),
     updated boolean default false,
     
@@ -83,22 +85,39 @@ CREATE TABLE IF NOT EXISTS Comments(
 
 CREATE TABLE IF NOT EXISTS Sports(
 	id int primary key,
-    sport_name varchar(50)
+    sport_name varchar(50),
+    sport_color VARCHAR(15)
 );
 
-INSERT INTO Sports VALUES
-(1, "futebol"),
-(2, "basquete"),
-(3, "volei"),
-(4, "tenis"),
-(5, "dança"),
-(6, "natação"),
-(7, "handebol"),
-(8, "pingpong"),
-(9, "corrida"),
-(10, "judô"),
-(11, "musculação"),
-(12, "maratona");
+INSERT INTO Sports(id, sport_name) VALUES
+(1, "Atletismo"),
+(2, "Badminton"),
+(3, "Basquete"),
+(4, "Beisebol"),
+(5, "Boxe"),
+(6, "Break Dance"),
+(7, "Canoagem"),
+(8, "Ciclismo"),
+(9, "Escalada"),
+(10, "Esgrima"),
+(11, "Futebol"),
+(12, "Futsal"),
+(14, "Ginástica"),
+(15, "Golfe"),
+(16, "Handebol"),
+(17, "Hipismo"),
+(18, "Judô"),
+(19, "Karatê"),
+(20, "Levantamento de Peso"),
+(21, "Natação"),
+(22, "Skate"),
+(24, "Surfe"),
+(25, "Taekwondo"),
+(26, "Tênis"),
+(27, "Tênis de Mesa"),
+(28, "Vôlei"),
+(29, "Triatlo"),
+(30, "Corrida");
 
 CREATE TABLE IF NOT EXISTS UserPracticeSport(
 	id int primary key auto_increment, 
@@ -120,4 +139,6 @@ CREATE TABLE IF NOT EXISTS Events(
     photo varchar(255),
     
     constraint events_userID foreign key(user_id) references Users(id)
-)
+);
+
+# INSERT INTO Events VALUES (DEFAULT, 1, "futebol", "2023-03-11", "14:12", "minha rua", "futebol na minha rua", "");

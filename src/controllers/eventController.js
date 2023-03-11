@@ -25,4 +25,15 @@ routes.get('/get-all-events', async (req, res) => {
     }
 })
 
+routes.get('/get-user-events/:id', async (req, res) =>{
+    const user_id = req.params.id
+
+    try{
+        const userEvents = await db.getUserEvents(user_id)
+        res.status(200).json(userEvents)
+    } catch(err){
+        res.status(400).json({err: err.message})
+    }
+} )
+
 export default routes

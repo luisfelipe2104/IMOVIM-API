@@ -16,4 +16,13 @@ async function getEvents() {
     return results[0]
 }
 
-export default { createEvent, getEvents }
+async function getUserEvents(user_id){
+    const conn = await db.connect()
+    const sql = 'SELECT *, dayofweek(event_date) AS dayOfWeek FROM Events WHERE user_id = ?;'
+    const results = await conn.query(sql, [user_id])
+
+    conn.end()
+    return results[0]
+}
+
+export default { createEvent, getEvents, getUserEvents }
