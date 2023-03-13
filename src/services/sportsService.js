@@ -1,6 +1,14 @@
 import db from "../database/connection.js";
 import { SportView } from "../../database/views.js";
 
+async function getSports() {
+    const conn = await db.connect()
+    const sql = 'SELECT * FROM Sports'
+    const results = await conn.query(sql)
+    conn.end()
+    return results[0]
+}
+
 async function checkUserPracticesSport(user_id, sport_id) {
     const conn = await db.connect()
     const sql = `${SportView} WHERE user_id = ? AND sport_id = ?`
@@ -34,4 +42,4 @@ export async function getSportsPracticed(user_id) {
     return results[0]
 }
 
-export default { getSportsPracticed, insertSportPracticed, checkUserPracticesSport, deleteSportPracticed }
+export default { getSports, getSportsPracticed, insertSportPracticed, checkUserPracticesSport, deleteSportPracticed }

@@ -20,6 +20,15 @@ routes.post('/insert', async (req, res) => {
     }
 })
 
+routes.get('/get-sports', async (req, res) => {
+    try {
+        const data = await db.getSports()
+        return res.status(200).json(data)
+    } catch (err) {
+        return res.status(400).json({msg: err.message})
+    }
+})
+
 routes.get('/get-sports-practiced/:id', async (req, res) => {
     const user_id = req.params.id
     try {
