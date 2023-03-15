@@ -51,7 +51,16 @@ async function getFollowersList(user_id) {
     return rows
 }
 
+async function getUsers() {
+    const conn = await db.connect()
+    const sql = 'SELECT nickname, u.id AS user_id, profileImage FROM Users u JOIN Profile p ON p.user_id = u.id'
+    const rows = await conn.query(sql)
+    conn.end()
+    return rows[0]
+}
+
 export default { 
+    getUsers,
     followUser, 
     unfollowUser, 
     checkUserIsFollowing ,

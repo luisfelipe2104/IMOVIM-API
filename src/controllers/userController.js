@@ -89,4 +89,13 @@ routes.post("/get-followers-list", async (req, res) => {
   }
 });
 
+routes.get('/search-user', async (req, res) => {
+  try{
+    const data = await db.getUsers()
+    return res.status(200).json(data);
+  } catch (err) {
+      return res.status(500).json({ msg: err });
+  }
+})
+
 export default routes;
