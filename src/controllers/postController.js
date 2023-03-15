@@ -79,9 +79,7 @@ routes.get('/get-all-posts', async (req, res) => {
         let posts = await db.getAllPosts()
         
         posts.map((post) => {
-            // console.log(post);
             post.created_at = dayjs(post.created_at).fromNow();
-            console.log(post);
         })
 
         return res.status(200).json(posts)
