@@ -1,5 +1,11 @@
 import express from 'express';
 import db from '../services/postService.js';
+import dayjs from 'dayjs-with-plugins';
+// import relativeTime from 'dayjs/plugin/relativeTime'
+// dayjs.extend(relativeTime)
+
+// console.log(relativeTime)
+dayjs.locale('pt-br')
 
 const routes = express.Router();
 
@@ -70,7 +76,14 @@ routes.get('/get-posts-of-friends/:id', async (req, res) => {
 // post/get-all-posts
 routes.get('/get-all-posts', async (req, res) => {
     try{
-        const posts = await db.getAllPosts()
+        let posts = await db.getAllPosts()
+        
+        posts.map((post) => {
+            // console.log(post);
+            post.created_at = dayjs(post.created_at).fromNow();
+            console.log(post);
+        })
+
         return res.status(200).json(posts)
     } catch (err) {
         return res.status(500).json({ msg: err.message})
