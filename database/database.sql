@@ -49,16 +49,16 @@ CREATE TABLE IF NOT EXISTS Friendship(
     constraint friend2_tblFriendship foreign key(friend2) references Users(id)
 );
 
+
 CREATE TABLE IF NOT EXISTS Posts(
 	id int primary key auto_increment,
     user_id int not null,
 	caption text,
     localization varchar(100),
-	created_at date not null,
+	created_at datetime default now() not null,
 	image varchar(255),
-    updated boolean default false,
-    
-    constraint user_ID_tblPosts foreign key(user_id) references Users(id)
+    updated boolean default false
+   
 );
 
 CREATE TABLE IF NOT EXISTS UserLikesPost(
