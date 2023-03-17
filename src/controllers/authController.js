@@ -13,7 +13,7 @@ export const reverseDate = (date) => {
   const year = `${date[0]}${date[1]}${date[2]}${date[3]}`;
   const month = `${date[5]}${date[6]}`
   const day = `${date[8]}${date[9]}`
-  return `${day}/${month}/${year}`;
+  return `${month}/${day}/${year}`;
 }
 
 // user/create-user
