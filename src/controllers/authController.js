@@ -78,7 +78,7 @@ routes.post("/login", async (req, res) => {
   // checks the password
   const userPassword = user[0].password;
   const isPasswordCorrect = bcrypt.compareSync(password, userPassword);
-  if (!isPasswordCorrect) return res.status(200).json({ msg: "Senha ou email incorretos" });
+  if (!isPasswordCorrect) return res.status(401).json({ msg: "Senha ou email incorretos" });
   let profileData = await getProfileInfo(user[0].id)
   // let nickname = await db.getNicknameByEmail(email)
   // nickname = nickname.map((i) => {return i.nickname})[0]
