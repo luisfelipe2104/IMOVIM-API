@@ -1,4 +1,5 @@
 import express from 'express'
+import moment from 'moment';
 import db from '../services/authService.js'
 import { createProfile } from "../services/profileService.js";
 import bcrypt from "bcrypt";
@@ -12,6 +13,10 @@ routes.post("/create-user", async (req, res) => {
   const { nickname, email, password, birthday, phoneNumber } = req.body;
 
   if (!nickname || !email || !password || !birthday) return res.status(400).json({ msg: "Insira todos os dados!" });
+
+  let isDateValid = moment(birthday).isValid()
+
+  if (!isDateValid) return res.status(400).json({ msg: 'Data inválida' })
 
   // checks if the user already exists
   const checkUser = await db.checkExistingUser(nickname, email);
