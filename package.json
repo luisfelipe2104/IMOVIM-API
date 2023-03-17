@@ -25,7 +25,8 @@
     "mongoose": "^6.9.1",
     "mysql2": "^2.3.3",
     "nodemailer": "^6.9.1",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "validate-date": "^2.0.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.20"

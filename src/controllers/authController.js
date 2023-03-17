@@ -5,8 +5,16 @@ import { createProfile } from "../services/profileService.js";
 import bcrypt from "bcrypt";
 import { getProfileImg } from '../services/profileService.js';
 import { getProfileInfo } from '../services/profileService.js';
+import validateDate from 'validate-date';
 
 const routes = express.Router();
+
+export const reverseDate = (date) => {
+  const year = `${date[0]}${date[1]}${date[2]}${date[3]}`;
+  const month = `${date[5]}${date[6]}`
+  const day = `${date[8]}${date[9]}`
+  return `${day}/${month}/${year}`;
+}
 
 // user/create-user
 routes.post("/create-user", async (req, res) => {
@@ -14,9 +22,10 @@ routes.post("/create-user", async (req, res) => {
 
   if (!nickname || !email || !password || !birthday) return res.status(400).json({ msg: "Insira todos os dados!" });
 
-  let isDateValid = moment(birthday).isValid()
 
-  if (!isDateValid) return res.status(400).json({ msg: 'Data inválida' })
+  let isDateValid = validateDate(reverseDate(birthday))
+
+  if (isDateValid !== 'Valid Date') return res.status(400).json({ msg: 'Data inválida', date: reverseDate(birthday) })
 
   // checks if the user already exists
   const checkUser = await db.checkExistingUser(nickname, email);
@@ -80,14 +89,6 @@ routes.post("/login", async (req, res) => {
   const isPasswordCorrect = bcrypt.compareSync(password, userPassword);
   if (!isPasswordCorrect) return res.status(200).json({ msg: "Senha ou email incorretos" });
   let profileData = await getProfileInfo(user[0].id)
-  // let nickname = await db.getNicknameByEmail(email)
-  // nickname = nickname.map((i) => {return i.nickname})[0]
-
-  // let user_id = await db.getUserIdByEmail(email)
-  // user_id = user_id.map((i) => {return i.id})[0]
-
-  // let profileImage = await getProfileImg(user_id)
-  // profileImage = profileImage.map((i) => {return i.profileImage})[0]
 
   profileData = profileData.map((i) => {
     return {
