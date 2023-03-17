@@ -76,18 +76,18 @@ routes.post("/create-user", async (req, res) => {
 routes.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
-  if (!email || !password) return res.status(200).json({ msg: "Insira todos os dados!" });
+  if (!email || !password) return res.status(400).json({ msg: "Insira todos os dados!" });
 
   // search for the user in the database
   const user = await db.login(email);
 
   // case the user is not found in the database
-  if (!user.length) return res.status(200).json({ msg: "Usuario não encontrado" });
+  if (!user.length) return res.status(404).json({ msg: "Usuario não encontrado" });
 
   // checks the password
   const userPassword = user[0].password;
   const isPasswordCorrect = bcrypt.compareSync(password, userPassword);
-  if (!isPasswordCorrect) return res.status(200).json({ msg: "Senha ou email incorretos" });
+  if (!isPasswordCorrect) return res.status(401).json({ msg: "Senha ou email incorretos" });
   let profileData = await getProfileInfo(user[0].id)
 
   profileData = profileData.map((i) => {
