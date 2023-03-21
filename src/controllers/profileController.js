@@ -2,6 +2,7 @@ import db from '../services/profileService.js'
 import express from 'express'
 import { getPostsOfUser } from '../services/postService.js'
 import { getSportsPracticed } from '../services/sportsService.js'
+import relativeTime from '../helpers/relativeTime.js'
 
 const routes = express.Router()
 
