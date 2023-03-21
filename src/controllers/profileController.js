@@ -87,6 +87,11 @@ routes.get('/get-profile-data/:id', async (req, res) => {
         const profileInfo = await db.getProfileInfo(user_id)
         const userPosts = await getPostsOfUser(user_id)
         const sportsPracticed = await getSportsPracticed(user_id)
+
+        userPosts.map((post) => {
+            post.created_at = relativeTime(post.created_at)
+        })
+        
         return res.status(200).json({ profileInfo, userPosts, sportsPracticed })
     } catch (err) {
         return res.status(500).json({ error: err.message })
