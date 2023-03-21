@@ -1,5 +1,6 @@
 import db from '../services/commentService.js'
 import express from 'express'
+import relativeTime from '../helpers/relativeTime.js'
 
 const routes = express.Router()
 
@@ -22,6 +23,11 @@ routes.get('/get-comments-of-post/:id', async (req, res) => {
     const post_id = req.params.id
     try {
         const comments = await db.getCommentsOfPost(post_id)
+
+        comments.map((comment) => {
+            comment.created_at = relativeTime(comment.created_at)
+        })
+
         return res.status(200).json( comments )
     } catch(err) {
         return res.status(400).json({ msg: err.message })
