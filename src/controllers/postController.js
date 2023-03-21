@@ -1,11 +1,6 @@
 import express from 'express';
 import db from '../services/postService.js';
-import dayjs from 'dayjs-with-plugins';
-// import relativeTime from 'dayjs/plugin/relativeTime'
-// dayjs.extend(relativeTime)
-
-// console.log(relativeTime)
-dayjs.locale('pt-br')
+import relativeTime from '../helpers/relativeTime.js';
 
 const routes = express.Router();
 
@@ -28,6 +23,11 @@ routes.get('/get-post/:id', async (req, res) => {
     const id = req.params.id
     try {
         const post = await db.getPost(id)
+
+        post.map((post) => {
+            post.created_at = relativeTime(post.created_at)
+        })
+
         res.status(200).json(post)
     } catch (err) {
         res.status(500).json({ error: err})
@@ -67,6 +67,11 @@ routes.get('/get-posts-of-friends/:id', async (req, res) => {
     try{
         const posts = await db.getPostsOfFollowing(user_id)
         if(!posts.length) return res.status(200).json({ msg: "Não há posts de amigos" })
+
+        posts.map((post) => {
+            post.created_at = relativeTime(post.created_at)
+        })
+
         return res.status(200).json(posts)
     } catch (err) {
         return res.status(500).json({ msg: err.message})
@@ -79,7 +84,7 @@ routes.get('/get-all-posts', async (req, res) => {
         let posts = await db.getAllPosts()
         
         posts.map((post) => {
-            post.created_at = dayjs(post.created_at).fromNow();
+            post.created_at = relativeTime(post.created_at)
         })
 
         return res.status(200).json(posts)
@@ -93,6 +98,11 @@ routes.get('/get-posts-of-user/:id', async (req, res) => {
     const user_id = req.params.id
     try {
         const posts = await db.getPostsOfUser(user_id)
+
+        posts.map((post) => {
+            post.created_at = relativeTime(post.created_at)
+        })
+
         return res.status(200).json(posts)
     } catch(err) {
         return res.status(500).json({ msg: err.message})
