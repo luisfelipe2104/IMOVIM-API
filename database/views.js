@@ -2,8 +2,13 @@
 export const ProfileView = `SELECT p.id, user_id, profileImage, profileBackground, description, localization, nickname 
     FROM Profile p JOIN Users u ON u.id = user_id`
 
+// const checkUserIsFollowing = `SELECT COUNT(*) FROM UserFollowing f WHERE
+//     f.user_id = u.id AND f.follower_id = ${followerID},
+// `
+
 export const PostView = (complement) => {
-    const script = `SELECT p.id, nickname, caption, image, p.created_at, user_id, updated, 
+    const script = `
+    SELECT p.id, nickname, caption, image, p.created_at, user_id, updated,
     (SELECT COUNT(*) FROM UserLikesPost WHERE post_id = p.id) AS likes, 
     (SELECT COUNT(*) FROM Comments WHERE post_id = p.id) AS comments, 
     (SELECT profileImage FROM Profile profile WHERE profile.user_id = p.user_id) AS profileImage, 
