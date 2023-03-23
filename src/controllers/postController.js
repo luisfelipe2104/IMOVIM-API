@@ -79,10 +79,9 @@ routes.get('/get-posts-of-friends/:id', async (req, res) => {
 })
 
 // post/get-all-posts
-routes.get('/get-all-posts/:ammount', async (req, res) => {
-    const ammount = req.params.ammount
+routes.get('/get-all-posts', async (req, res) => {
     try{
-        let posts = await db.getAllPosts(parseInt(ammount))
+        let posts = await db.getAllPosts()
         
         posts.map((post) => {
             post.created_at = relativeTime(post.created_at)
@@ -90,7 +89,7 @@ routes.get('/get-all-posts/:ammount', async (req, res) => {
 
         return res.status(200).json(posts)
     } catch (err) {
-        return res.status(500).json({ msg: err.message })
+        return res.status(500).json({ msg: err.message})
     }
 })
 
