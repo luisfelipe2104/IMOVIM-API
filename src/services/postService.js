@@ -18,11 +18,11 @@ export async function getPost(id) {
     return row[0]
 }
 
-export async function getAllPosts() {
+export async function getAllPosts(ammount) {
     const conn = await db.connect()
     // const sql = 'SELECT p.id, nickname, caption, image, p.created_at, (SELECT COUNT(*) FROM UserLikesPost WHERE post_id = p.id) AS likes FROM Posts p JOIN Users u ON u.id = user_id ORDER BY likes DESC'
-    const sql = `${PostView('')}`
-    const rows = await conn.query(sql)
+    const sql = `${PostView('')} LIMIT 0, ?`
+    const rows = await conn.query(sql, [ammount])
     conn.end()
     return rows[0]
 }
