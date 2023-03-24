@@ -144,14 +144,20 @@ CREATE TABLE IF NOT EXISTS Events(
 # INSERT INTO Events VALUES (DEFAULT, 1, "futebol", "2023-03-11", "14:12", "minha rua", "futebol na minha rua", "");
 
 CREATE TABLE IF NOT EXISTS Room(
-	id int primary key auto_increment, 
+	id varchar(250) primary key, 
     description varchar(100),
     room_name varchar(30),
-    room_type enum('private', 'public') not null
+    room_type enum('private', 'public') default 'private' not null,
+    photo varchar(255)
 );
+
 
 CREATE TABLE IF NOT EXISTS UserInTheRoom(
     id int primary key auto_increment, 
-    room_id int not null,
+    room_id varchar(250) not null,
     user_id int not null
 );
+
+INSERT INTO UserInTheRoom(room_id, user_id) values
+(1, 3);
+
