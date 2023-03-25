@@ -1,6 +1,7 @@
 import db from '../services/chatService.js'
 import express from 'express'
 import { v4 as uuidv4 } from 'uuid'
+import { ChatModel } from '../../database/ChatSchema.js'
 
 const routes = express.Router()
 
@@ -44,6 +45,35 @@ routes.get('/get-users-room/:id', async (req, res) => {
     } catch (err) {
         return res.status(400).json({ msg: err.message })
     }
+})
+
+routes.post('/create-message', async (req, res) => {
+    const { message, author_id, time, room } = req.body
+
+    const chat = new ChatModel({
+        message: message,
+        author_id: author_id,
+        time: time,
+        room: room
+    })
+
+    try {
+        chat.save()
+        return res.status(200).json({ msg: 'mensagem salva'})
+    } catch (err) {
+        return res.status(400).json({ msg: err.message })
+    }
+})
+
+routes.get('/get-messages/:room', async (req, res) => {
+    const room = req.params.room
+    
+    await ChatModel.find({room: room})
+    .then((data, err) => {
+        if (err) return res.status(400).json({ msg: err})
+
+        return res.status(200).json(data)
+    })
 })
 
 export default routes
