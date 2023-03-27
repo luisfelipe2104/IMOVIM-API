@@ -121,11 +121,11 @@ routes.post('/update-post', async (req, res) => {
     }
 })
 
-// post;/delete-post?id=2&user=3
-routes.delete('/delete-post', async (req, res) => {
-    const { id, user } = req.query
+// post;/delete-post
+routes.post('/delete-post', async (req, res) => {
+    const { post_id, user_id } = req.body
     try {
-        await db.deletePost(id, user)
+        await db.deletePost(post_id, user_id)
         return res.status(200).json({ msg: 'Post deletado!' })
     } catch(err) {
         return res.status(500).json({ msg: 'Erro ao deletear o post', err: err.message })
