@@ -76,4 +76,15 @@ routes.get('/get-messages/:room', async (req, res) => {
     })
 })
 
+routes.delete('/delete-messages/:room_id', async (req, res) => {
+    const room_id = req.params.room_id
+
+    try {
+        await ChatModel.deleteMany({ room: room_id })
+        return res.status(200).json({ msg: 'Mensagens deletadas!' })
+    } catch(err) {
+        return res.status(400).json({ msg: err.message })
+    }
+})
+
 export default routes
