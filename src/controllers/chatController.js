@@ -81,6 +81,7 @@ routes.delete('/delete-messages/:room_id', async (req, res) => {
 
     try {
         await ChatModel.deleteMany({ room: room_id })
+        await db.deleteMessages(room_id)
         return res.status(200).json({ msg: 'Mensagens deletadas!' })
     } catch(err) {
         return res.status(400).json({ msg: err.message })
