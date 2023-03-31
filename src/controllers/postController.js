@@ -98,7 +98,7 @@ routes.post('/get-all-posts', async (req, res) => {
 routes.get('/get-posts-of-user/:id', async (req, res) => {
     const user_id = req.params.id
     try {
-        const posts = await db.getPostsOfUser(user_id)
+        const posts = await db.getPostsOfUser(user_id, user_id) // needs to be fixed!!!
 
         posts.map((post) => {
             post.created_at = relativeTime(post.created_at)
