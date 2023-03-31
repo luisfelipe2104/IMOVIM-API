@@ -88,7 +88,7 @@ routes.post("/login", async (req, res) => {
   const userPassword = user[0].password;
   const isPasswordCorrect = bcrypt.compareSync(password, userPassword);
   if (!isPasswordCorrect) return res.status(401).json({ msg: "Senha ou email incorretos" });
-  let profileData = await getProfileInfo(user[0].id)
+  let profileData = await getProfileInfo(user[0].id, user[0].id)
 
   profileData = profileData.map((i) => {
     return {
