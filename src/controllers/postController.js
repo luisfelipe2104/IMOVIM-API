@@ -79,11 +79,10 @@ routes.get('/get-posts-of-friends/:id', async (req, res) => {
 })
 
 // post/get-all-posts
-routes.get('/get-all-posts/:ammount/:user_id', async (req, res) => {
-    const ammount = req.params.ammount
-    const user_id = req.params.user_id
+routes.post('/get-all-posts/:ammount/:user_id', async (req, res) => {
+    const { postAmmount, user_id } = req.body
     try{
-        let posts = await db.getAllPosts(parseInt(ammount), user_id)
+        let posts = await db.getAllPosts(parseInt(postAmmount), user_id)
         
         posts.map((post) => {
             post.created_at = relativeTime(post.created_at)
