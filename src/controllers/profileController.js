@@ -85,7 +85,7 @@ routes.delete('/delete-cover/:id', async (req, res) => {
 routes.post('/get-profile-data', async (req, res) => {
     const { user_id, userSeeingId } = req.body
     try {
-        const profileInfo = await db.getProfileInfo(user_id)
+        const profileInfo = await db.getProfileInfo(user_id, userSeeingId)
         const userPosts = await getPostsOfUser(user_id, userSeeingId)
         const sportsPracticed = await getSportsPracticed(user_id)
 
@@ -102,7 +102,7 @@ routes.post('/get-profile-data', async (req, res) => {
 routes.get('/get-editingProfile-data/:id', async (req, res) => {
     const user_id = req.params.id
     try {
-        const profileInfo = await db.getProfileInfo(user_id)
+        const profileInfo = await db.getProfileInfo(user_id, user_id)
         return res.status(200).json(profileInfo)
     } catch (err) {
         return res.status(500).json({ error: err.message })

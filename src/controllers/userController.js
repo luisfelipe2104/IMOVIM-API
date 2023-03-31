@@ -43,20 +43,18 @@ routes.post("/get-nickname-by-email", async (req, res) => {
 
 // user/follow
 routes.post("/follow", async (req, res) => {
-  const { user, follower } = req.body;
+  const { user_id, follower_id } = req.body;
 
-  let user_id = await db.getUserIdByName(user);
-  user_id = user_id[0].id;
-
-  let follower_id = await db.getUserIdByName(follower);
-  follower_id = follower_id[0].id;
-
-  if (await db.checkUserIsFollowing(user_id, follower_id)) {
-    await db.unfollowUser(user_id, follower_id);
-    return res.status(200).json({ msg: `Você deixou de seguir ${user}` });
-  } else {
-    await db.followUser(user_id, follower_id);
-    return res.status(200).json({ msg: `Você está seguindo ${user}` });
+  try{
+    if (await db.checkUserIsFollowing(user_id, follower_id)) {
+      await db.unfollowUser(user_id, follower_id);
+      return res.status(200).json({ msg: `Você deixou de seguir ${user_id}` });
+    } else {
+      await db.followUser(user_id, follower_id);
+      return res.status(200).json({ msg: `Você está seguindo ${user_id}` });
+    }
+  } catch (err) {
+    return res.status(500).json({ msg: err.message})
   }
 });
 

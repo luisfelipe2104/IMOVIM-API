@@ -1,6 +1,11 @@
 
-export const ProfileView = `SELECT p.id, user_id, profileImage, profileBackground, description, localization, nickname 
-    FROM Profile p JOIN Users u ON u.id = user_id`
+export const ProfileView = (userSeeingId) => {
+    const script = `
+    SELECT p.id, user_id, profileImage, profileBackground, description, localization, nickname,
+    (SELECT COUNT(*) FROM UserFollowing f WHERE f.user_id = u.id AND f.follower_id = ${userSeeingId}) AS userIsFollowing
+    FROM Profile p JOIN Users u ON u.id = user_id`   
+    return script 
+} 
 
 // const checkUserIsFollowing = `SELECT COUNT(*) FROM UserFollowing f WHERE
 //     f.user_id = u.id AND f.follower_id = ${followerID},

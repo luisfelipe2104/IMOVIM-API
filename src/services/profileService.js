@@ -70,9 +70,9 @@ export async function getProfileImg(user_id) {
     return results[0]
 }
 
-export async function getProfileInfo(user_id) {
+export async function getProfileInfo(user_id, userSeeingId) {
     const conn = await db.connect()
-    const sql = `${ProfileView} WHERE user_id =?`
+    const sql = `${ProfileView(userSeeingId)} WHERE user_id =?`
     const results = await conn.query(sql, [user_id])
     conn.end()
     return results[0]
