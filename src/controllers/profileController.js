@@ -82,11 +82,11 @@ routes.delete('/delete-cover/:id', async (req, res) => {
     }
 })
 
-routes.get('/get-profile-data/:id', async (req, res) => {
-    const user_id = req.params.id
+routes.post('/get-profile-data', async (req, res) => {
+    const { user_id, userSeeingId } = req.body
     try {
         const profileInfo = await db.getProfileInfo(user_id)
-        const userPosts = await getPostsOfUser(user_id)
+        const userPosts = await getPostsOfUser(user_id, userSeeingId)
         const sportsPracticed = await getSportsPracticed(user_id)
 
         userPosts.map((post) => {

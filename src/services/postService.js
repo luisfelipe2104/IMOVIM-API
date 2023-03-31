@@ -52,9 +52,9 @@ export async function updatePost(post_id, user_id, caption, image) {
     await conn.end()
 }
 
-export async function getPostsOfUser(user_id) {
+export async function getPostsOfUser(user_id, userSeeingId) {
     const conn = await db.connect()
-    const sql = `${PostView('WHERE user_id =?', '')}`
+    const sql = `${PostView('WHERE user_id =?', userSeeingId)}`
     const data = [user_id]
     const rows = await conn.query(sql, data)
     conn.end()
