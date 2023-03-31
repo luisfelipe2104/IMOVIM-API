@@ -72,15 +72,12 @@ routes.post("/get-followers-amount", async (req, res) => {
 });
 
 // user/get-followers-list
-routes.post("/get-followers-list", async (req, res) => {
-  const { user } = req.body;
-  let user_id = await db.getUserIdByName(user);
-  user_id = user_id[0].id;
+routes.get("/get-followers-list/:id", async (req, res) => {
+  const user_id = req.params.id
+
   try {
     let followers = await db.getFollowersList(user_id);
-    followers = followers.map((follower) => {
-      return follower.nickname;
-    });
+    
     return res.status(200).json(followers);
   } catch (err) {
     return res.status(500).json({ msg: err });
