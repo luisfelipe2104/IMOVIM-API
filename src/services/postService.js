@@ -9,10 +9,10 @@ export async function createPost(user_id, caption, image) {
     await conn.end()
 }
 
-export async function getPost(id) {
+export async function getPost(post_id, user_id) {
     const conn = await db.connect()
-    const sql = `${PostView('WHERE p.id =?')}`
-    const data = [id]
+    const sql = `${PostView('WHERE p.id =?', user_id)}`
+    const data = [post_id]
     const row = await conn.query(sql, data)
     conn.end()
     return row[0]

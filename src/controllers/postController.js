@@ -19,10 +19,10 @@ routes.post('/create-post', async (req, res) => {
     }
 })
 
-routes.get('/get-post/:id', async (req, res) => {
-    const id = req.params.id
+routes.post('/get-post', async (req, res) => {
+    const { post_id, user_id } = req.body
     try {
-        const post = await db.getPost(id)
+        const post = await db.getPost(post_id, user_id)
 
         post.map((post) => {
             post.created_at = relativeTime(post.created_at)
