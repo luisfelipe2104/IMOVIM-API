@@ -79,7 +79,7 @@ routes.get('/get-posts-of-friends/:id', async (req, res) => {
 })
 
 // post/get-all-posts
-routes.post('/get-all-posts/:ammount/:user_id', async (req, res) => {
+routes.post('/get-all-posts', async (req, res) => {
     const { postAmmount, user_id } = req.body
     try{
         let posts = await db.getAllPosts(parseInt(postAmmount), user_id)
