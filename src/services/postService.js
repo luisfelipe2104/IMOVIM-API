@@ -18,10 +18,10 @@ export async function getPost(id) {
     return row[0]
 }
 
-export async function getAllPosts(ammount) {
+export async function getAllPosts(ammount, user_id) {
     const conn = await db.connect()
     // const sql = 'SELECT p.id, nickname, caption, image, p.created_at, (SELECT COUNT(*) FROM UserLikesPost WHERE post_id = p.id) AS likes FROM Posts p JOIN Users u ON u.id = user_id ORDER BY likes DESC'
-    const sql = `${PostView('')} LIMIT 0, ?`
+    const sql = `${PostView('', user_id)} LIMIT 0, ?`
     const rows = await conn.query(sql, [ammount])
     conn.end()
     return rows[0]
@@ -30,7 +30,7 @@ export async function getAllPosts(ammount) {
 export async function getPostsOfFollowing(user_id) {
     const conn = await db.connect()
     // const sql = 'SELECT p.id, nickname, caption, image, p.created_at, (SELECT COUNT(*) FROM UserLikesPost WHERE post_id = p.id) AS likes FROM Posts p JOIN Users u ON u.id = user_id WHERE user_id IN (SELECT user_id FROM UserFollowing WHERE follower_id = ?) ORDER BY likes DESC'
-    const sql = `${PostView('WHERE user_id IN (SELECT user_id FROM UserFollowing WHERE follower_id = ?)')}`
+    const sql = `${PostView('WHERE user_id IN (SELECT user_id FROM UserFollowing WHERE follower_id = ?)', '')}`
     const rows = await conn.query(sql, [user_id])
     conn.end()
     return rows[0]
@@ -54,7 +54,7 @@ export async function updatePost(post_id, user_id, caption, image) {
 
 export async function getPostsOfUser(user_id) {
     const conn = await db.connect()
-    const sql = `${PostView('WHERE user_id =?')}`
+    const sql = `${PostView('WHERE user_id =?', '')}`
     const data = [user_id]
     const rows = await conn.query(sql, data)
     conn.end()

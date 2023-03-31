@@ -6,13 +6,13 @@ export const ProfileView = `SELECT p.id, user_id, profileImage, profileBackgroun
 //     f.user_id = u.id AND f.follower_id = ${followerID},
 // `
 
-export const PostView = (complement) => {
+export const PostView = (complement, userIdParameter) => {
     const script = `
     SELECT p.id, nickname, caption, image, p.created_at, user_id, updated,
     (SELECT COUNT(*) FROM UserLikesPost WHERE post_id = p.id) AS likes, 
     (SELECT COUNT(*) FROM Comments WHERE post_id = p.id) AS comments, 
     (SELECT profileImage FROM Profile profile WHERE profile.user_id = p.user_id) AS profileImage, 
-    (SELECT COUNT(*) FROM UserLikesPost WHERE user_id = p.user_id AND post_id = p.id) AS userLikedPost 
+    (SELECT COUNT(*) FROM UserLikesPost WHERE user_id = ${userIdParameter} AND post_id = p.id) AS userLikedPost 
     FROM Posts p JOIN Users u ON u.id = user_id ${complement} ORDER BY p.id DESC`
     return script
 }
