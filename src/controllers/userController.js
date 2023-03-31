@@ -48,10 +48,10 @@ routes.post("/follow", async (req, res) => {
   try{
     if (await db.checkUserIsFollowing(user_id, follower_id)) {
       await db.unfollowUser(user_id, follower_id);
-      return res.status(200).json({ msg: `Você deixou de seguir ${user_id}` });
+      return res.status(200).json({ msg: `Você deixou de seguir` });
     } else {
       await db.followUser(user_id, follower_id);
-      return res.status(200).json({ msg: `Você está seguindo ${user_id}` });
+      return res.status(200).json({ msg: `Você está seguindo` });
     }
   } catch (err) {
     return res.status(500).json({ msg: err.message})
