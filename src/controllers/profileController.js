@@ -113,7 +113,7 @@ routes.get('/get-profile-img/:id', async (req, res) => {
     const user_id = req.params.id
     try{
         const profileImg = await db.getProfileImg(user_id)
-        return res.status(200).json(profileImg[0].profileImage)
+        return res.status(200).json(profileImg[0])
     } catch(err) {
         return res.status(400).json({ msg: err.message })
     }
