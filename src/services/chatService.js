@@ -7,6 +7,14 @@ async function createRoom(id) {
     conn.end()
 }
 
+async function createGroupRoom(id, room_name, description, photo) {
+    const conn = await db.connect()
+    const sql = `INSERT INTO Room(id, room_name, description, photo, room_type) VALUES(?, ?, ?, ?, 'public')`
+    const data = [id, room_name, description, photo]
+    await conn.query(sql, data)
+    conn.end()
+}
+
 async function findUsersRoom(userId) {
     const conn = await db.connect()
     const sql = `SELECT room_id, user_id FROM UserInTheRoom WHERE user_id = ?`
@@ -54,4 +62,4 @@ async function getUsersRoom(user_id) {
     return result[0]
 }
 
-export default { createRoom, findUsersRoom, insertUserInRoom, getUsersRoom, deleteMessages }
+export default { createRoom, findUsersRoom, insertUserInRoom, getUsersRoom, deleteMessages, createGroupRoom }

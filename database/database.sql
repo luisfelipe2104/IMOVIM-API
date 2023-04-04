@@ -148,14 +148,17 @@ CREATE TABLE IF NOT EXISTS Room(
     description varchar(100),
     room_name varchar(30),
     room_type enum('private', 'public') default 'private' not null,
-    photo varchar(255)
+    photo varchar(255),
+    created_at datetime default now(),
+    created_by varchar(30)
 );
 
 
 CREATE TABLE IF NOT EXISTS UserInTheRoom(
     id int primary key auto_increment, 
     room_id varchar(250) not null,
-    user_id int not null
+    user_id int not null,
+    user_type enum('common', 'admin')
 );
 
 INSERT INTO UserInTheRoom(room_id, user_id) values
