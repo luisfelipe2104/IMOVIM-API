@@ -47,6 +47,9 @@ async function getUsersRoom(user_id) {
     (SELECT nickname FROM UserInTheRoom 
     JOIN Users u ON u.id = user_id
     WHERE room_id = r.id AND user_id != ? AND room_type = 'private') AS friend,
+    (SELECT u.id FROM UserInTheRoom 
+    JOIN Users u ON u.id = user_id
+    WHERE room_id = r.id AND user_id != ? AND room_type = 'private') AS friend_id,
     (SELECT profileImage FROM UserInTheRoom userRoom2
     JOIN Profile p ON p.user_id = userRoom2.user_id
     WHERE room_id = r.id AND userRoom2.user_id != ? AND room_type = 'private') AS friendPhoto 
