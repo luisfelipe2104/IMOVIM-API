@@ -58,7 +58,7 @@ async function getUsersRoom(user_id) {
     JOIN Users u ON u.id = user_id
     WHERE user_id = ?;
     `
-    const data = [user_id, user_id, user_id]
+    const data = [user_id, user_id, user_id, user_id]
     const result = await conn.query(sql, data)
     conn.end()
 
