@@ -1,5 +1,6 @@
 import express from "express";
 import db from "../services/eventService.js";
+import relativeTime from '../helpers/relativeTime.js';
 
 const routes = express.Router()
 
@@ -19,6 +20,11 @@ routes.post('/create-event', async (req, res) => {
 routes.get('/get-all-events', async (req, res) => {
     try{
         const events = await db.getEvents()
+        
+        events.map((event) => {
+            event.event_date = relativeTime(event.event_date)
+        })
+        
         res.status(200).json(events)
     } catch (err) {
         res.status(400).json({ msg: err.message})
@@ -30,6 +36,11 @@ routes.get('/get-user-events/:id', async (req, res) =>{
 
     try{
         const userEvents = await db.getUserEvents(user_id)
+        
+        userEvents.map((event) => {
+            event.event_date = relativeTime(event.event_date)
+        })
+
         res.status(200).json(userEvents)
     } catch(err){
         res.status(400).json({err: err.message})
