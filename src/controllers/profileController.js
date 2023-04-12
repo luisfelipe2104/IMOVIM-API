@@ -7,9 +7,13 @@ import relativeTime from '../helpers/relativeTime.js'
 const routes = express.Router()
 
 routes.post('/update-profile', async (req, res) => {
-    const { user_id, image, background, localization } = req.body
+    const { user_id, image, background, localization, nickname } = req.body
+    if (!nickname) return res.status(400).json({ msg: "Nickname não pode ser vazio!" })
     try {
+        const isNicknameValid = await db.checkExistingNickname(nickname, user_id)
+        if (isNicknameValid.length) return res.status(400).json({ msg: "Nickname já está sendo utilizado!" })
         await db.updateProfile(user_id, image, background, localization)
+        await db.updateName(user_id, nickname)
         res.status(200).json({ msg: "Perfil atualizado!" })
     } catch (err) {
         return res.status(500).json({ msg: err.message })
