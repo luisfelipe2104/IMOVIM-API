@@ -19,7 +19,7 @@ async function checkFriendShipExists(user_id, friend_id) {
 
 async function acceptSolicitation(user_id, friend_id) {
   const conn = await db.connect()
-  const sql = 'UPDATE Friendship SET pending = false WHERE friend1 = ? AND friend2 = ? OR friend2 = ? AND friend1 = ?'
+  const sql = 'UPDATE Friendship SET pending = false WHERE friend1 = ? AND friend2 = ? OR friend1 = ? AND friend2 = ?'
   const data = [user_id, friend_id, friend_id, user_id]
   await conn.query(sql, data)
 
