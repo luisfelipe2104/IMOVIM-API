@@ -2,7 +2,8 @@
 export const ProfileView = (userSeeingId) => {
     const script = `
     SELECT p.id, user_id, profileImage, profileBackground, description, localization, nickname,
-    (SELECT COUNT(*) FROM UserFollowing f WHERE f.user_id = u.id AND f.follower_id = ${userSeeingId}) AS userIsFollowing
+    (SELECT pending FROM Friendship WHERE friend1 = u.id AND friend2 = ${userSeeingId} 
+    OR friend1 = ${userSeeingId} AND friend2 = u.id) AS pending
     FROM Profile p JOIN Users u ON u.id = user_id`   
     return script 
 } 
