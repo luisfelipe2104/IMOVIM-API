@@ -45,7 +45,7 @@ async function getFollowersAmount(user_id) {
 
 async function getFollowersList(user_id) {
     const conn = await db.connect()
-    const sql = `SELECT follower.nickname, p.profileImage FROM UserFollowing t 
+    const sql = `SELECT follower.nickname, p.profileImage, follower.id as friend_id FROM UserFollowing t 
                 JOIN Users follower ON t.follower_id = follower.id 
                 JOIN Profile p ON p.user_id = t.follower_id
                 WHERE t.user_id = ? 
