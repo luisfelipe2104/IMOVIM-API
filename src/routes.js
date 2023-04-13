@@ -7,6 +7,7 @@ import authRoutes from "./controllers/authController.js"
 import sportsRoutes from "./controllers/sportsController.js"
 import eventRoutes from "./controllers/eventController.js"
 import chatRoutes from "./controllers/chatController.js"
+import friendShipRoutes from "./controllers/friendController.js"
 
 const routes = express()
 
@@ -18,5 +19,6 @@ routes.use("/profile", profileRoutes)
 routes.use("/sports", sportsRoutes)
 routes.use("/event", eventRoutes)
 routes.use("/chat", chatRoutes)
+routes.use("/friendShip", friendShipRoutes)
 
 export default routes
