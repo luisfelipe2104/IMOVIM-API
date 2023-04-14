@@ -35,9 +35,23 @@ async function removeFriendship(user_id, friend_id) {
   conn.end()
 }
 
+async function getSolicitations(user_id) {
+  const conn = await db.connect()
+  const sql = `SELECT nickname, localization, profileImage FROM Friendship 
+    JOIN Users u ON friend1 = u.id
+    JOIN Profile p ON friend1 = p.user_id
+    WHERE friend2 = ?
+    `
+  const results = await conn.query(sql, [user_id])
+  
+  conn.end()
+  return results[0]
+}
+
 export default {
   makeFriends,
   checkFriendShipExists,
   acceptSolicitation,
-  removeFriendship
+  removeFriendship,
+  getSolicitations
 }
