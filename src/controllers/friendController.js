@@ -55,7 +55,7 @@ routes.get('/get-solicitations/:id', async (req, res) => {
     results = await results.map((result) => {
       return {
         ...result,
-        sportsInCommon: `${sportsInCommon.length} esporte(s) em comum`
+        sportsInCommon: `${sportsInCommon.length}`
       }
     })
     return res.status(200).json(results)
