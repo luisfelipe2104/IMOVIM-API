@@ -50,7 +50,14 @@ routes.get('/get-solicitations/:id', async (req, res) => {
   const user_id = req.params.id
 
   try{
-    const results = await db.getSolicitations(user_id)
+    let results = await db.getSolicitations(user_id)
+    const sportsInCommon = await db.getSportsInCommon(user_id, results[0].friend1)
+    results = await results.map((result) => {
+      return {
+        ...result,
+        sportsInCommon: `${sportsInCommon.length} esporte(s) em comum`
+      }
+    })
     return res.status(200).json(results)
   } catch(err) {
     return res.status(400).json({ msg: err.message })
