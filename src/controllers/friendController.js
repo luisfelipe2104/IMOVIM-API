@@ -51,7 +51,8 @@ routes.get('/get-solicitations/:id', async (req, res) => {
 
   try{
     let results = await db.getSolicitations(user_id)
-    const sportsInCommon = await db.getSportsInCommon(user_id, results[0].friend1)
+    const friend_id = await results[0].friend1
+    const sportsInCommon = await db.getSportsInCommon(user_id, await friend_id)
     results = await results.map((result) => {
       return {
         ...result,
