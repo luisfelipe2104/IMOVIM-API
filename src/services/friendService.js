@@ -35,6 +35,20 @@ async function removeFriendship(user_id, friend_id) {
   conn.end()
 }
 
+async function getFriends(user_id) {
+  const conn = await db.connect()
+  const sql = `SELECT nickname, profileImage, user_id FROM Friendship 
+  JOIN Profile p ON user_id != ? AND user_id = friend1 OR user_id != ? AND user_id = friend2
+  JOIN Users u ON u.id != ? AND u.id = friend1 OR u.id != ? AND u.id = friend2
+  WHERE friend1 = ? AND pending = 0 
+  OR friend2 = ? AND pending = 0
+  `
+  const data = [user_id, user_id, user_id, user_id, user_id, user_id]
+  const results = await conn.query(sql, data)
+  conn.end()
+  return results[0]
+}
+
 async function getSolicitations(user_id) {
   const conn = await db.connect()
   const sql = `SELECT nickname, localization, profileImage, friend1,
@@ -47,7 +61,7 @@ async function getSolicitations(user_id) {
     JOIN Profile p ON friend1 = p.user_id
     WHERE friend2 = ? AND pending = 1
     `
-  let results = await conn.query(sql, [user_id, user_id])
+  const results = await conn.query(sql, [user_id, user_id])
   conn.end()
   return results[0]
 }
@@ -72,5 +86,6 @@ export default {
   acceptSolicitation,
   removeFriendship,
   getSolicitations,
-  getSportsInCommon
+  getSportsInCommon,
+  getFriends
 }

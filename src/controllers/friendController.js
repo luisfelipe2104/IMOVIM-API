@@ -57,4 +57,15 @@ routes.get('/get-solicitations/:id', async (req, res) => {
   }
 })
 
+routes.get('/get-friends/:id', async (req, res) => {
+  const user_id = req.params.id
+
+  try{
+    const results = await db.getFriends(user_id)
+    return res.status(200).json(results)
+  } catch(err) {
+    return res.status(400).json({ msg: err.message })
+  }
+})
+
 export default routes
