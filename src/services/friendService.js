@@ -40,7 +40,7 @@ async function getSolicitations(user_id) {
   const sql = `SELECT nickname, localization, profileImage, friend1 FROM Friendship 
     JOIN Users u ON friend1 = u.id
     JOIN Profile p ON friend1 = p.user_id
-    WHERE friend2 = ?
+    WHERE friend2 = ? AND pending = 1
     `
   const results = await conn.query(sql, [user_id])
   
