@@ -16,7 +16,7 @@ async function getEvents() {
     return results[0]
 }
 
-async function getUserEvents(user_id){
+async function getUserEvents(user_id) {
     const conn = await db.connect()
     const sql = 'SELECT *, dayofweek(event_date) AS dayOfWeek FROM Events WHERE user_id = ?;'
     const results = await conn.query(sql, [user_id])
@@ -25,4 +25,13 @@ async function getUserEvents(user_id){
     return results[0]
 }
 
-export default { createEvent, getEvents, getUserEvents }
+async function goToEvent(event_id, user_id) {
+    const conn = await db.connect()
+    const sql = 'INSERT INTO UserGoesToEvent(event_id, user_id) VALUES (?, ?)'
+    const data = [event_id, user_id]
+
+    await conn.query(sql, data)
+    conn.end()
+}
+
+export default { createEvent, getEvents, getUserEvents, goToEvent }

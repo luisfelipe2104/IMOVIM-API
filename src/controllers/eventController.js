@@ -18,33 +18,45 @@ routes.post('/create-event', async (req, res) => {
 })
 
 routes.get('/get-all-events', async (req, res) => {
-    try{
+    try {
         const events = await db.getEvents()
-        
+
         events.map((event) => {
             event.event_date = relativeTime(event.event_date)
         })
-        
+
         res.status(200).json(events)
     } catch (err) {
-        res.status(400).json({ msg: err.message})
+        res.status(400).json({ msg: err.message })
     }
 })
 
-routes.get('/get-user-events/:id', async (req, res) =>{
+routes.get('/get-user-events/:id', async (req, res) => {
     const user_id = req.params.id
 
-    try{
+    try {
         const userEvents = await db.getUserEvents(user_id)
-        
+
         userEvents.map((event) => {
             event.event_date = relativeTime(event.event_date)
         })
 
         res.status(200).json(userEvents)
-    } catch(err){
-        res.status(400).json({err: err.message})
+    } catch (err) {
+        res.status(400).json({ err: err.message })
     }
-} )
+})
+
+routes.post('/go-to-event', async (req, res) => {
+    const { user_id, event_id } = req.body
+
+    try {
+        await db.goToEvent(event_id, user_id)
+        return res.status(200).json({ msg: "Presença confirmada!" })
+    }
+    catch (err) {
+        res.status(400).json({ msg: err.message })
+    }
+})
 
 export default routes
