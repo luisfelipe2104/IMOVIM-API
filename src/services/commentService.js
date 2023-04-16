@@ -43,9 +43,9 @@ async function getWhoCommentedOnPost(user_id) {
             JOIN Posts p ON p.id = post_id
             JOIN Users u ON u.id = c.user_id
             JOIN Profile pro ON pro.user_id = c.user_id
-            WHERE p.user_id = ?
+            WHERE p.user_id = ? AND c.user_id != ?
     `
-    const results = await conn.query(sql, [user_id])
+    const results = await conn.query(sql, [user_id, user_id])
     conn.end()
     return results[0]
 }

@@ -18,6 +18,21 @@ export async function getPost(post_id, user_id) {
     return row[0]
 }
 
+async function getWhoLikedPost(user_id) {
+    const conn = await db.connect()
+    const sql = `SELECT nickname, c.user_id as userWhoLiked, 
+            profileImage, p.id as postId
+            FROM UserLikesPost c
+            JOIN Posts p ON p.id = post_id
+            JOIN Users u ON u.id = c.user_id
+            JOIN Profile pro ON pro.user_id = c.user_id
+            WHERE p.user_id = ? AND c.user_id != ?
+    `
+    const results = await conn.query(sql, [user_id, user_id])
+    conn.end()
+    return results[0]
+}
+
 export async function getAllPosts(ammount, user_id) {
     const conn = await db.connect()
     // const sql = 'SELECT p.id, nickname, caption, image, p.created_at, (SELECT COUNT(*) FROM UserLikesPost WHERE post_id = p.id) AS likes FROM Posts p JOIN Users u ON u.id = user_id ORDER BY likes DESC'
@@ -106,5 +121,6 @@ export default {
     unlikePost, 
     checkUserLikedPost, 
     getNumOfLikes, 
-    getPostsOfFollowing 
+    getPostsOfFollowing,
+    getWhoLikedPost
 }

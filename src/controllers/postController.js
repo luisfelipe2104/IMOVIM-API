@@ -110,6 +110,17 @@ routes.get('/get-posts-of-user/:id', async (req, res) => {
     }
 })
 
+routes.get('/get-user-who-liked/:id', async (req, res) => {
+    const user_id = req.params.id
+    try {
+        const posts = await db.getWhoLikedPost(user_id)
+
+        return res.status(200).json(posts)
+    } catch(err) {
+        return res.status(500).json({ msg: err.message})
+    }
+})
+
 // post/update-post
 routes.post('/update-post', async (req, res) => {
     const { post_id, user_id, caption, image } = req.body
