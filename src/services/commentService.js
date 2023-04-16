@@ -35,7 +35,7 @@ async function updateComment(comment, comment_id, user_id) {
     conn.end()
 }
 
-async function getWhoCommentedOnPost(user_id) {
+export async function getWhoCommentedOnPost(user_id) {
     const conn = await db.connect()
     const sql = `SELECT nickname, c.user_id as commentOwnerId, 
             profileImage, p.id as postId

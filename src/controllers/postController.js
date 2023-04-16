@@ -1,6 +1,7 @@
 import express from 'express';
 import db from '../services/postService.js';
 import relativeTime from '../helpers/relativeTime.js';
+import { getWhoCommentedOnPost } from '../services/commentService.js';
 
 const routes = express.Router();
 
@@ -113,9 +114,33 @@ routes.get('/get-posts-of-user/:id', async (req, res) => {
 routes.get('/get-user-who-liked/:id', async (req, res) => {
     const user_id = req.params.id
     try {
-        const posts = await db.getWhoLikedPost(user_id)
+        const data = await db.getWhoLikedPost(user_id)
 
-        return res.status(200).json(posts)
+        return res.status(200).json(data)
+    } catch(err) {
+        return res.status(500).json({ msg: err.message})
+    }
+})
+
+routes.get('/get-post-notifications/:id', async (req, res) => {
+    const user_id = req.params.id
+    try {
+        let usersWhoLiked = await db.getWhoLikedPost(user_id)
+        usersWhoLiked = usersWhoLiked.map((i) => {
+            return {
+                ...i,
+                text: `${i.nickname} curtiu sua postagem`
+            }
+        })
+        let usersWhoCommented = await getWhoCommentedOnPost(user_id)
+        usersWhoCommented = usersWhoLiked.map((i) => {
+            return {
+                ...i,
+                text: `${i.nickname} comentou em sua postagem`
+            }
+        })
+
+        return res.status(200).json({ usersWhoLiked, usersWhoCommented })
     } catch(err) {
         return res.status(500).json({ msg: err.message})
     }
