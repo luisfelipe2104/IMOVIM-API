@@ -34,6 +34,17 @@ routes.get('/get-comments-of-post/:id', async (req, res) => {
     }
 })
 
+routes.get('/get-people-who-commented/:id', async (req, res) => {
+    const user_id = req.params.id
+    try {
+        const comments = await db.getWhoCommentedOnPost(user_id)
+
+        return res.status(200).json( comments )
+    } catch(err) {
+        return res.status(400).json({ msg: err.message })
+    }
+})
+
 // comment/delete-comment?id=0&user=2
 routes.delete('/delete-comment', async (req, res) => {
     const { id, user } = req.query
