@@ -124,23 +124,33 @@ routes.get('/get-user-who-liked/:id', async (req, res) => {
 
 routes.get('/get-post-notifications/:id', async (req, res) => {
     const user_id = req.params.id
+    const notifications = []
     try {
         let usersWhoLiked = await db.getWhoLikedPost(user_id)
         usersWhoLiked = usersWhoLiked.map((i) => {
-            return {
+            const data = { 
                 ...i,
-                text: `${i.nickname} curtiu sua postagem`
+                text: `${i.nickname} curtiu sua postagem` 
             }
+            notifications.push(data)
+            return data
         })
+        
         let usersWhoCommented = await getWhoCommentedOnPost(user_id)
-        usersWhoCommented = usersWhoLiked.map((i) => {
-            return {
+        usersWhoCommented = usersWhoCommented.map((i) => {
+            const data = { 
                 ...i,
-                text: `${i.nickname} comentou em sua postagem`
+                text: `${i.nickname} comentou em sua postagem` 
             }
+            notifications.push(data)
+            return data
         })
 
-        return res.status(200).json({ usersWhoLiked, usersWhoCommented })
+        notifications.sort(function(a,b) { 
+            return b.created_at - a.created_at 
+        });
+
+        return res.status(200).json(notifications)
     } catch(err) {
         return res.status(500).json({ msg: err.message})
     }

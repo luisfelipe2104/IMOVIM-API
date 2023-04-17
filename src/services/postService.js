@@ -20,8 +20,8 @@ export async function getPost(post_id, user_id) {
 
 async function getWhoLikedPost(user_id) {
     const conn = await db.connect()
-    const sql = `SELECT nickname, c.user_id as userWhoLiked, 
-            profileImage, p.id as postId
+    const sql = `SELECT nickname, c.user_id as user_id, 
+            profileImage, p.id as postId, c.created_at
             FROM UserLikesPost c
             JOIN Posts p ON p.id = post_id
             JOIN Users u ON u.id = c.user_id
