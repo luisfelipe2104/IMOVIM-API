@@ -150,6 +150,10 @@ routes.get('/get-post-notifications/:id', async (req, res) => {
             return b.created_at - a.created_at 
         });
 
+        notifications.map((notification) => {
+            notification.created_at = relativeTime(notification.created_at)
+        })
+        
         return res.status(200).json(notifications)
     } catch(err) {
         return res.status(500).json({ msg: err.message})
