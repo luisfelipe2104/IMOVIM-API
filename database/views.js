@@ -27,6 +27,6 @@ export const PostView = (complement, userIdParameter) => {
 export const SportView = `SELECT nickname, sport_name, sport_color, user_id, sport_id FROM UserPracticeSport 
     JOIN Users u ON u.id = user_id JOIN Sports s ON s.id = sport_id`
 
-export const CommentView = `SELECT id, comment, created_at, post_id, updated, 
+export const CommentView = `SELECT c.id AS comment_id, c.user_id, comment, created_at, post_id, updated, 
     (SELECT nickname FROM Users WHERE id = c.user_id) AS nickname, 
     (SELECT profileImage FROM Profile p WHERE p.user_id = c.user_id) profileImage FROM Comments c`
