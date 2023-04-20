@@ -51,6 +51,11 @@ routes.post('/go-to-event', async (req, res) => {
     const { user_id, event_id } = req.body
 
     try {
+        const checkUserInEvent = await db.checkUserGoesToEvent(event_id, user_id)
+        if (checkUserInEvent[0].userGoes) {
+            await db.removeUserFromEvent(event_id, user_id)
+            return res.status(200).json({ msg: 'Presença do evento retirada!'})
+        }
         await db.goToEvent(event_id, user_id)
         return res.status(200).json({ msg: "Presença confirmada!" })
     }
