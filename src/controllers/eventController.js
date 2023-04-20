@@ -64,4 +64,20 @@ routes.post('/go-to-event', async (req, res) => {
     }
 })
 
+routes.post('/save-event', async (req, res) => {
+    const { user_id, event_id } = req.body
+
+    try {
+        const checkSavedEvent = await db.checkUserSavedEvent(event_id, user_id)
+        if (checkSavedEvent[0].userSaved) {
+            await db.unsaveEvent(event_id, user_id)
+            return res.status(200).json({ msg: 'Evento retirado de salvos!'})
+        }
+        await db.saveEvent(event_id, user_id)
+        return res.status(200).json({ msg: "Evento salvo!" })
+    } catch (err) {
+        res.status(400).json({ msg: err.message })
+    }
+})
+
 export default routes

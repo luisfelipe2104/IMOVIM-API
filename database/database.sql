@@ -147,6 +147,12 @@ CREATE TABLE IF NOT EXISTS UserGoesToEvent(
 	user_id int not null
 );
 
+CREATE TABLE IF NOT EXISTS SavedEvent(
+	id int not null primary key auto_increment,
+	event_id int not null,
+	user_id int not null
+);
+
 # INSERT INTO Events VALUES (DEFAULT, 1, "futebol", "2023-03-11", "14:12", "minha rua", "futebol na minha rua", "");
 
 CREATE TABLE IF NOT EXISTS Room(

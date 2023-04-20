@@ -52,4 +52,31 @@ async function removeUserFromEvent(event_id, user_id) {
     conn.end()
 }
 
-export default { removeUserFromEvent, createEvent, getEvents, getUserEvents, goToEvent, checkUserGoesToEvent }
+async function checkUserSavedEvent(event_id, user_id) {
+    const conn = await db.connect()
+    const sql = 'SELECT COUNT(*) as userSaved FROM SavedEvent WHERE event_id = ? AND user_id = ?'
+    const data = [event_id, user_id]
+
+    const results = await conn.query(sql, data)
+    conn.end()
+    return results[0]
+}
+
+async function saveEvent(event_id, user_id) {
+    const conn = await db.connect()
+    const sql = 'INSERT INTO SavedEvent(event_id, user_id) VALUES (?, ?)'
+    const data = [event_id, user_id]
+
+    await conn.query(sql, data)
+    conn.end()
+}
+
+async function unsaveEvent(event_id, user_id) {
+    const conn = await db.connect()
+    const sql = 'DELETE FROM SavedEvent WHERE event_id = ? AND user_id = ?'
+    const data = [event_id, user_id]
+    await conn.query(sql, data)
+    conn.end()
+}
+
+export default { checkUserSavedEvent, saveEvent, unsaveEvent, removeUserFromEvent, createEvent, getEvents, getUserEvents, goToEvent, checkUserGoesToEvent }
