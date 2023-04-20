@@ -6,7 +6,7 @@ const routes = express.Router()
 
 routes.post('/create-event', async (req, res) => {
     const { user_id, event_name, event_date, event_hour, localization, description, photo } = req.body;
-    if (!user_id || !event_name || !event_date || !event_hour || !localization || !description) {
+    if (!user_id || !event_name || !event_date || !event_hour || !localization || !description || !photo) {
         return res.status(400).json({ msg: "Insira todas as informações do evento!" })
     }
     try {
@@ -17,9 +17,11 @@ routes.post('/create-event', async (req, res) => {
     }
 })
 
-routes.get('/get-all-events', async (req, res) => {
+routes.get('/get-all-events/:id', async (req, res) => {
+    const user_id = req.params.id
+
     try {
-        const events = await db.getEvents()
+        const events = await db.getEvents(user_id)
 
         events.map((event) => {
             event.event_date = relativeTime(event.event_date)

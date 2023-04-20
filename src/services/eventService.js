@@ -8,18 +8,26 @@ async function createEvent(user_id, event_name, event_date, event_hour, localiza
     conn.end()
 }
 
-async function getEvents() {
+async function getEvents(user_id) {
     const conn = await db.connect()
-    const sql = 'SELECT *, dayofweek(event_date) AS dayOfWeek FROM Events;'
-    const results = await conn.query(sql)
+    const sql = `SELECT e.id, e.user_id, event_name, event_date, 
+    event_hour, localization, description, photo, 
+    (SELECT COUNT(*) FROM UserGoesToEvent WHERE user_id = ? AND event_id = e.id) AS userGoesToEvent,
+    (SELECT COUNT(*) FROM SavedEvent WHERE user_id = ? AND event_id = e.id) AS userSavedEvent,
+    dayofweek(event_date) AS dayOfWeek FROM Events e`
+    const results = await conn.query(sql, [user_id, user_id])
     conn.end()
     return results[0]
 }
 
 async function getUserEvents(user_id) {
     const conn = await db.connect()
-    const sql = 'SELECT *, dayofweek(event_date) AS dayOfWeek FROM Events WHERE user_id = ?;'
-    const results = await conn.query(sql, [user_id])
+    const sql = `SELECT e.id, e.user_id, event_name, event_date, 
+    event_hour, localization, description, photo, 
+    (SELECT COUNT(*) FROM UserGoesToEvent WHERE user_id = ? AND event_id = e.id) AS userGoesToEvent,
+    (SELECT COUNT(*) FROM SavedEvent WHERE user_id = ? AND event_id = e.id) AS userSavedEvent,
+    dayofweek(event_date) AS dayOfWeek FROM Events e WHERE user_id = ?`
+    const results = await conn.query(sql, [user_id, user_id, user_id])
 
     conn.end()
     return results[0]
