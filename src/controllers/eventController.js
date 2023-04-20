@@ -17,6 +17,23 @@ routes.post('/create-event', async (req, res) => {
     }
 })
 
+routes.get('/get-event/:user_id/:event_id', async (req, res) => {
+    const user_id = req.params.user_id
+    const event_id = req.params.event_id
+
+    try {
+        const events = await db.getEvent(user_id, event_id)
+
+        events.map((event) => {
+            event.event_date = relativeTime(event.event_date)
+        })
+
+        res.status(200).json(events)
+    } catch (err) {
+        res.status(400).json({ msg: err.message })
+    }
+})
+
 routes.get('/get-all-events/:id', async (req, res) => {
     const user_id = req.params.id
 
