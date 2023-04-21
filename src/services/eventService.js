@@ -42,7 +42,7 @@ async function getSavedEvents(user_id) {
     (SELECT COUNT(*) FROM UserGoesToEvent WHERE event_id = e.id) AS participants,
     (SELECT COUNT(*) FROM UserGoesToEvent WHERE user_id = ? AND event_id = e.id) AS userGoesToEvent,
     (SELECT COUNT(*) FROM SavedEvent WHERE user_id = ? AND event_id = e.id) AS userSavedEvent,
-    dayofweek(event_date) AS dayOfWeek FROM SavedEvent JOIN Events e ON event_id = e.id WHERE e.user_id = ?`
+    dayofweek(event_date) AS dayOfWeek FROM SavedEvent s JOIN Events e ON event_id = e.id WHERE s.user_id = ?`
     const data = [user_id, user_id, user_id]
     const results = await conn.query(sql, data)
 
