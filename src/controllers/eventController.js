@@ -66,6 +66,22 @@ routes.get('/get-user-events/:id', async (req, res) => {
     }
 })
 
+routes.get('/get-saved-events/:id', async (req, res) => {
+    const user_id = req.params.id
+
+    try {
+        const savedEvents = await db.getSavedEvents(user_id)
+
+        savedEvents.map((event) => {
+            event.event_date = relativeTime(event.event_date)
+        })
+
+        res.status(200).json(savedEvents)
+    } catch (err) {
+        res.status(400).json({ err: err.message })
+    }
+})
+
 routes.post('/go-to-event', async (req, res) => {
     const { user_id, event_id } = req.body
 

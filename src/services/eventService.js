@@ -35,6 +35,21 @@ async function getUserEvents(user_id) {
     return results[0]
 }
 
+async function getSavedEvents(user_id) {
+    const conn = await db.connect()
+    const sql = `SELECT e.id, e.user_id, event_name, event_date, 
+    event_hour, localization, description, photo, 
+    (SELECT COUNT(*) FROM UserGoesToEvent WHERE event_id = e.id) AS participants,
+    (SELECT COUNT(*) FROM UserGoesToEvent WHERE user_id = ? AND event_id = e.id) AS userGoesToEvent,
+    (SELECT COUNT(*) FROM SavedEvent WHERE user_id = ? AND event_id = e.id) AS userSavedEvent,
+    dayofweek(event_date) AS dayOfWeek FROM SavedEvent JOIN Events e ON event_id = e.id WHERE e.user_id = ?`
+    const data = [user_id, user_id, user_id]
+    const results = await conn.query(sql, data)
+
+    conn.end()
+    return results[0]
+}
+
 async function getEvent(user_id, event_id) {
     const conn = await db.connect()
     const sql = `SELECT e.id, e.user_id, event_name, event_date, 
@@ -103,4 +118,4 @@ async function unsaveEvent(event_id, user_id) {
     conn.end()
 }
 
-export default { getEvent, checkUserSavedEvent, saveEvent, unsaveEvent, removeUserFromEvent, createEvent, getEvents, getUserEvents, goToEvent, checkUserGoesToEvent }
+export default { getSavedEvents, getEvent, checkUserSavedEvent, saveEvent, unsaveEvent, removeUserFromEvent, createEvent, getEvents, getUserEvents, goToEvent, checkUserGoesToEvent }
