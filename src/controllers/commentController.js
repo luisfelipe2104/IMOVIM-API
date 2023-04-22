@@ -34,6 +34,7 @@ routes.get('/get-comments-of-post/:id', async (req, res) => {
     }
 })
 
+// comment/get-people-who-commented/:id
 routes.get('/get-people-who-commented/:id', async (req, res) => {
     const user_id = req.params.id
     try {
