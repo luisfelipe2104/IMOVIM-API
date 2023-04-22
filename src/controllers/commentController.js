@@ -52,7 +52,7 @@ routes.delete('/delete-comment', async (req, res) => {
         await db.deleteComment(id, user)
         return res.status(200).json({ msg: "Comentario deletado!"})
     } catch(err) {
-        return res.status(400).json({ msg: 'erro ao criar o comentário', err: err.message })
+        return res.status(400).json({ msg: 'erro ao deletar o comentário', err: err.message })
     }
 })
 
