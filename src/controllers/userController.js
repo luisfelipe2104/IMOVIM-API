@@ -84,6 +84,7 @@ routes.get("/get-followers-list/:id", async (req, res) => {
   }
 });
 
+// user/search-user
 routes.get('/search-user', async (req, res) => {
   try{
     const data = await db.getUsers()
