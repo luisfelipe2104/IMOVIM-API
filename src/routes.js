@@ -8,9 +8,11 @@ import sportsRoutes from "./controllers/sportsController.js"
 import eventRoutes from "./controllers/eventController.js"
 import chatRoutes from "./controllers/chatController.js"
 import friendShipRoutes from "./controllers/friendController.js"
+import emailRoutes from "./mailer/send.js"
 
 const routes = express()
 
+routes.use("/mail", emailRoutes)
 routes.use("/auth", authRoutes)
 routes.use("/user", userRoutes)
 routes.use("/post", postRoutes)
