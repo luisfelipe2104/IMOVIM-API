@@ -12,7 +12,8 @@ routes.post('/send-email', async (req, res) => {
     try{
         const code = Math.floor(100000 + Math.random() * 900000)
         await sendMailText(to, subject, htmlMessage(code))
-        return res.status(200).json({ msg: 'Email enviado!', code })
+        return res.status(200).json({ msg: 'Email enviado!', code, user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PWD_APP })
     } catch (err) {
         console.log(err);
         return res.status(500).json({ msg: err.message })
