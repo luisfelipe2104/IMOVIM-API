@@ -38,12 +38,13 @@ routes.post('/create-room', async (req, res) => {
 })
 
 routes.post('/create-group', async (req, res) => {
-    const { room_name, description, photo } = req.body
-    if (!room_name || !description) return res.status(400).json({ msg: "Insira o nome e descrição!" })
+    const { room_name, description, photo, user_id } = req.body
+    if (!room_name || !description || !user_id) return res.status(400).json({ msg: "Insira o nome e descrição!" })
     const room_id = uuidv4()
 
     try{
         await db.createGroupRoom(room_id, room_name, description, photo)
+        await db.insertUserInRoom(room_id, user_id)
         return res.status(200).json({ msg: 'Grupo criado!', room_id })
     } catch(err) {
         return res.status(400).json({ msg: err.message })
