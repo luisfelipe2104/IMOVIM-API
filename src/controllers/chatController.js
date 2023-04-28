@@ -44,7 +44,22 @@ routes.post('/create-group', async (req, res) => {
 
     try{
         await db.createGroupRoom(room_id, room_name, description, photo)
-        return res.status(200).json({ msg: 'Grupo criado!' })
+        return res.status(200).json({ msg: 'Grupo criado!', room_id })
+    } catch(err) {
+        return res.status(400).json({ msg: err.message })
+    }
+})
+
+routes.post('/insert-user-in-group', async (req, res) => {
+    const { users, room_id } = req.body
+
+    if (!users || !room_id) return res.status(400).json({ msg: "Insira todos dados!" })
+
+    try {
+        users.forEach(async (user) => {
+            await db.insertUserInRoom(room_id, user)
+        })
+        return res.status(200).json({ msg: "Usuarios adicionados!" })
     } catch(err) {
         return res.status(400).json({ msg: err.message })
     }
