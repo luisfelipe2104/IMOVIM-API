@@ -58,7 +58,7 @@ routes.post('/insert-user-in-group', async (req, res) => {
 
     try {
         users.forEach(async (user) => {
-            await db.insertUserInRoom(room_id, user)
+            await db.insertUserInRoom(room_id, user.user_id)
         })
         return res.status(200).json({ msg: "Usuarios adicionados!" })
     } catch(err) {
