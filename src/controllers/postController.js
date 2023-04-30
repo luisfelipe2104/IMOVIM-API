@@ -122,6 +122,16 @@ routes.get('/get-user-who-liked/:id', async (req, res) => {
     }
 })
 
+routes.get('/get-like-list/:id', async (req, res) => {
+    const post_id = req.params.id
+    try{
+        const data = await db.getLikeList(post_id)
+        return res.status(200).json(data)
+    } catch(err) {
+        return res.status(500).json({ msg: err.message }) 
+    }
+})
+
 routes.get('/get-post-notifications/:id', async (req, res) => {
     const user_id = req.params.id
     const notifications = []
