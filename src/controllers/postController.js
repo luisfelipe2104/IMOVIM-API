@@ -111,6 +111,7 @@ routes.get('/get-posts-of-user/:id', async (req, res) => {
     }
 })
 
+// post/get-user-who-liked/:id
 routes.get('/get-user-who-liked/:id', async (req, res) => {
     const user_id = req.params.id
     try {
