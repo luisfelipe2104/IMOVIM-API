@@ -51,6 +51,17 @@ routes.post('/create-group', async (req, res) => {
     }
 })
 
+routes.get('/get-group-members/:id', async (req, res) => {
+    const room_id = req.params.id
+    
+    try {
+        const data = await db.getGroupMembers(room_id)
+        return res.status(200).json(data)
+    } catch(err) {
+        return res.status(400).json({ msg: err.message })
+    }
+})
+
 routes.post('/insert-user-in-group', async (req, res) => {
     const { users, room_id } = req.body
 

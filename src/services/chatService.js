@@ -31,6 +31,17 @@ async function insertUserInRoom(roomId, userId) {
     conn.end()
 }
 
+async function getGroupMembers(room_id) {
+    const conn = await db.connect()
+    const sql = `SELECT nickname, profileImage, p.user_id FROM UserInTheRoom r 
+                    JOIN Profile p ON p.user_id = r.user_id 
+                    JOIN Users u ON u.id = r.user_id
+                    WHERE room_id = ?`
+    const results = await conn.query(sql, [room_id])
+    conn.end()
+    return results[0]
+}
+
 async function deleteMessages(room_id) {
     const conn = await db.connect()
     const sql1 = 'DELETE FROM Room WHERE id = ?'
@@ -65,4 +76,4 @@ async function getUsersRoom(user_id) {
     return result[0]
 }
 
-export default { createRoom, findUsersRoom, insertUserInRoom, getUsersRoom, deleteMessages, createGroupRoom }
+export default { getGroupMembers, createRoom, findUsersRoom, insertUserInRoom, getUsersRoom, deleteMessages, createGroupRoom }
