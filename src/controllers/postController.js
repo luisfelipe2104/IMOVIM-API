@@ -123,6 +123,7 @@ routes.get('/get-user-who-liked/:id', async (req, res) => {
     }
 })
 
+// post/get-like-list/:id
 routes.get('/get-like-list/:id', async (req, res) => {
     const post_id = req.params.id
     try{
