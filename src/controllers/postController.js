@@ -66,7 +66,7 @@ routes.get('/get-num-likes/:id', async (req, res) => {
 routes.get('/get-posts-of-friends/:id', async (req, res) => {
     const user_id = req.params.id
     try{
-        const posts = await db.getPostsOfFollowing(user_id)
+        const posts = await db.getPostsOfFriends(user_id)
         if(!posts.length) return res.status(200).json({ msg: "Não há posts de amigos" })
 
         posts.map((post) => {
