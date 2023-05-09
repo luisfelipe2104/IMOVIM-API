@@ -85,9 +85,10 @@ routes.get("/get-followers-list/:id", async (req, res) => {
 });
 
 // user/search-user
-routes.get('/search-user', async (req, res) => {
+routes.get('/search-user/:id', async (req, res) => {
+  const user_id = req.params.id
   try{
-    const data = await db.getUsers()
+    const data = await db.getUsers(user_id)
     return res.status(200).json(data);
   } catch (err) {
       return res.status(500).json({ msg: err });
