@@ -49,6 +49,12 @@ CREATE TABLE IF NOT EXISTS Friendship(
     constraint friend2_tblFriendship foreign key(friend2) references Users(id)
 );
 
+CREATE TABLE IF NOT EXISTS BlockedUser(
+    id int primary key auto_increment,
+    user_id int not null,
+    blocked_user_id int not null,
+    created_at datetime default now()
+);
 
 CREATE TABLE IF NOT EXISTS Posts(
 	id int primary key auto_increment,
