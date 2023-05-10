@@ -20,6 +20,17 @@ routes.post('/block-user', async (req, res) => {
     }
 })
 
+routes.get('/get-blocked-users/:id', async (req, res) => {
+    const user_id = req.params.id
+
+    try{
+        const data = await db.getBlockedUsers(user_id)
+        return res.status(200).json(data)
+    } catch (err) {
+        return res.status(500).json({ msg: err.message })
+    }
+})
+
 routes.delete('/unblock-user/:user_id/:blocked_user_id', async (req, res) => {
     const { user_id, blocked_user_id } = req.params
 
