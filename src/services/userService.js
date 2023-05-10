@@ -57,8 +57,8 @@ async function getFollowersList(user_id) {
 
 async function getUsers(user_id) {
     const conn = await db.connect()
-    const sql = 'SELECT nickname, u.id AS user_id, profileImage FROM Users u JOIN Profile p ON p.user_id = u.id WHERE p.user_id NOT IN (SELECT blocked_user_id FROM BlockedUser b WHERE b.user_id = ?)'
-    const rows = await conn.query(sql, [user_id])
+    const sql = 'SELECT nickname, u.id AS user_id, profileImage FROM Users u JOIN Profile p ON p.user_id = u.id WHERE p.user_id NOT IN (SELECT blocked_user_id FROM BlockedUser b WHERE b.user_id = ?) AND p.user_id NOT IN (SELECT b.user_id FROM BlockedUser b WHERE blocked_user_id = ?)'
+    const rows = await conn.query(sql, [user_id, user_id])
     conn.end()
     return rows[0]
 }

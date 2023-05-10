@@ -51,7 +51,7 @@ async function getLikeList(post_id) {
 export async function getAllPosts(ammount, user_id) {
     const conn = await db.connect()
     // const sql = 'SELECT p.id, nickname, caption, image, p.created_at, (SELECT COUNT(*) FROM UserLikesPost WHERE post_id = p.id) AS likes FROM Posts p JOIN Users u ON u.id = user_id ORDER BY likes DESC'
-    const sql = `${PostView(`WHERE p.user_id NOT IN (SELECT blocked_user_id FROM BlockedUser b WHERE b.user_id = ${user_id})`, user_id)} LIMIT 0, ?`
+    const sql = `${PostView(`WHERE p.user_id NOT IN (SELECT blocked_user_id FROM BlockedUser b WHERE b.user_id = ${user_id}) AND p.user_id NOT IN (SELECT b.user_id FROM BlockedUser b WHERE blocked_user_id = ${user_id})`, user_id)} LIMIT 0, ?`
     const rows = await conn.query(sql, [ammount])
     conn.end()
     return rows[0]
