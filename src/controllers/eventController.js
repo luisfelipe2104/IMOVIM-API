@@ -5,10 +5,13 @@ import relativeTime from '../helpers/relativeTime.js';
 const routes = express.Router()
 
 routes.post('/create-event', async (req, res) => {
-    const { user_id, event_name, event_date, event_hour, localization, description, photo } = req.body;
-    if (!user_id || !event_name || !event_date || !event_hour || !localization || !description || !photo) {
+    const { user_id, event_name, event_date, event_hour, localization, description, photo, marker } = req.body;
+    if (!user_id || !event_name || !event_date || !event_hour || !localization || !description || !photo || !marker) {
         return res.status(400).json({ msg: "Insira todas as informações do evento!" })
     }
+    console.log(marker);
+    console.log(marker[0].latitude)
+    console.log(marker[0].longitude)
     try {
         await db.createEvent(user_id, event_name, event_date, event_hour, localization, description, photo)
         return res.status(200).json({ msg: "Evento criado!" })
