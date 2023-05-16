@@ -140,9 +140,11 @@ CREATE TABLE IF NOT EXISTS Events(
     event_name varchar(100) not null,
     event_date date not null,
     event_hour time not null,
-    localization varchar(100) not null,
     description text not null,
     photo varchar(255),
+    address varchar(255) not null,
+    latitude float not null,
+    longitude float not null,
     
     constraint events_userID foreign key(user_id) references Users(id)
 );

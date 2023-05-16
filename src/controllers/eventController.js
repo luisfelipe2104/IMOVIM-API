@@ -1,20 +1,39 @@
 import express from "express";
 import db from "../services/eventService.js";
 import relativeTime from '../helpers/relativeTime.js';
+import axios from "axios";
 
 const routes = express.Router()
 
 routes.post('/create-event', async (req, res) => {
-    const { user_id, event_name, event_date, event_hour, localization, description, photo, marker } = req.body;
-    if (!user_id || !event_name || !event_date || !event_hour || !localization || !description || !photo || !marker) {
+    const { user_id, event_name, event_date, event_hour, description, photo, marker } = req.body;
+    if (!user_id || !event_name || !event_date || !event_hour || !description || !photo || !marker) {
         return res.status(400).json({ msg: "Insira todas as informações do evento!" })
     }
     console.log(marker);
     console.log(marker[0].latitude)
     console.log(marker[0].longitude)
     try {
-        await db.createEvent(user_id, event_name, event_date, event_hour, localization, description, photo)
-        return res.status(200).json({ msg: "Evento criado!" })
+        const latitude = marker[0].latitude
+        const longitude = marker[0].longitude
+        await axios.get(`https://api.geoapify.com/v1/geocode/reverse?lat=${latitude}&lon=${longitude}&type=postcode&format=json&apiKey=3d3ba9cc1cd74c178a11d57e2009b645`)
+        .then(async (result) => {
+            // console.log(res.data.results[0]);
+            const data = result.data.results[0]
+            const cep = data.postcode
+            await axios.get(`https://viacep.com.br/ws/${cep}/json/`)
+            .then(async (response) => {
+                console.log(response.data);
+                const street = response.data.logradouro
+                const neighborhood = response.data.bairro
+                const city = response.data.localidade
+                const state = response.data.uf
+                const address = `${street}, ${neighborhood}, ${city} - ${state}, ${cep}`
+                console.log(address);
+                await db.createEvent(user_id, event_name, event_date, event_hour, description, photo, address, latitude, longitude)
+                return res.status(200).json({ msg: "Evento criado!" })
+            })
+        })
     } catch (err) {
         return res.status(400).json({ msg: err.message })
     }

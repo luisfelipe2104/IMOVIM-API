@@ -1,9 +1,9 @@
 import db from "../database/connection.js"
 
-async function createEvent(user_id, event_name, event_date, event_hour, localization, description, photo) {
+async function createEvent(user_id, event_name, event_date, event_hour, description, photo, address, latitude, longitude) {
     const conn = await db.connect()
-    const sql = 'INSERT INTO Events(user_id, event_name, event_date, event_hour, localization, description, photo) VALUES(?, ?, ?, ?, ?, ?, ?)'
-    const data = [user_id, event_name, event_date, event_hour, localization, description, photo]
+    const sql = 'INSERT INTO Events(user_id, event_name, event_date, event_hour, description, photo, address, latitude, longitude) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)'
+    const data = [user_id, event_name, event_date, event_hour, description, photo, address, latitude, longitude]
     await conn.query(sql, data)
     conn.end()
 }
@@ -11,7 +11,7 @@ async function createEvent(user_id, event_name, event_date, event_hour, localiza
 async function getEvents(user_id) {
     const conn = await db.connect()
     const sql = `SELECT e.id, e.user_id, event_name, event_date, 
-    event_hour, localization, description, photo, 
+    event_hour, address AS localization, description, photo, 
     (SELECT COUNT(*) FROM UserGoesToEvent WHERE event_id = e.id) AS participants,
     (SELECT COUNT(*) FROM UserGoesToEvent WHERE user_id = ? AND event_id = e.id) AS userGoesToEvent,
     (SELECT COUNT(*) FROM SavedEvent WHERE user_id = ? AND event_id = e.id) AS userSavedEvent,
@@ -24,7 +24,7 @@ async function getEvents(user_id) {
 async function getUserEvents(user_id) {
     const conn = await db.connect()
     const sql = `SELECT e.id, e.user_id, event_name, event_date, 
-    event_hour, localization, description, photo, 
+    event_hour, address AS localization, description, photo, 
     (SELECT COUNT(*) FROM UserGoesToEvent WHERE event_id = e.id) AS participants,
     (SELECT COUNT(*) FROM UserGoesToEvent WHERE user_id = ? AND event_id = e.id) AS userGoesToEvent,
     (SELECT COUNT(*) FROM SavedEvent WHERE user_id = ? AND event_id = e.id) AS userSavedEvent,
@@ -38,7 +38,7 @@ async function getUserEvents(user_id) {
 async function getSavedEvents(user_id) {
     const conn = await db.connect()
     const sql = `SELECT e.id, e.user_id, event_name, event_date, 
-    event_hour, localization, description, photo, 
+    event_hour, address AS localization, description, photo, 
     (SELECT COUNT(*) FROM UserGoesToEvent WHERE event_id = e.id) AS participants,
     (SELECT COUNT(*) FROM UserGoesToEvent WHERE user_id = ? AND event_id = e.id) AS userGoesToEvent,
     (SELECT COUNT(*) FROM SavedEvent WHERE user_id = ? AND event_id = e.id) AS userSavedEvent,
@@ -53,7 +53,7 @@ async function getSavedEvents(user_id) {
 async function getEvent(user_id, event_id) {
     const conn = await db.connect()
     const sql = `SELECT e.id, e.user_id, event_name, event_date, 
-    event_hour, localization, description, photo, 
+    event_hour, address AS localization, description, photo, 
     (SELECT COUNT(*) FROM UserGoesToEvent WHERE event_id = e.id) AS participants,
     (SELECT COUNT(*) FROM UserGoesToEvent WHERE user_id = ? AND event_id = e.id) AS userGoesToEvent,
     (SELECT COUNT(*) FROM SavedEvent WHERE user_id = ? AND event_id = e.id) AS userSavedEvent,
