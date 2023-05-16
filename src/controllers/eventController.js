@@ -10,9 +10,9 @@ routes.post('/create-event', async (req, res) => {
     if (!user_id || !event_name || !event_date || !event_hour || !description || !photo || !marker) {
         return res.status(400).json({ msg: "Insira todas as informações do evento!" })
     }
-    console.log(marker);
-    console.log(marker[0].latitude)
-    console.log(marker[0].longitude)
+    // console.log(marker);
+    // console.log(marker[0].latitude)
+    // console.log(marker[0].longitude)
     try {
         const latitude = marker[0].latitude
         const longitude = marker[0].longitude
