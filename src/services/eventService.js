@@ -10,7 +10,7 @@ async function createEvent(user_id, event_name, event_date, event_hour, descript
 
 async function getEvents(user_id) {
     const conn = await db.connect()
-    const sql = `SELECT e.id, e.user_id, event_name, event_date, 
+    const sql = `SELECT e.id, e.user_id, latitude, longitude, event_name, event_date, 
     event_hour, address AS localization, description, photo, 
     (SELECT COUNT(*) FROM UserGoesToEvent WHERE event_id = e.id) AS participants,
     (SELECT COUNT(*) FROM UserGoesToEvent WHERE user_id = ? AND event_id = e.id) AS userGoesToEvent,
@@ -23,7 +23,7 @@ async function getEvents(user_id) {
 
 async function getUserEvents(user_id) {
     const conn = await db.connect()
-    const sql = `SELECT e.id, e.user_id, event_name, event_date, 
+    const sql = `SELECT e.id, e.user_id, latitude, longitude, event_name, event_date, 
     event_hour, address AS localization, description, photo, 
     (SELECT COUNT(*) FROM UserGoesToEvent WHERE event_id = e.id) AS participants,
     (SELECT COUNT(*) FROM UserGoesToEvent WHERE user_id = ? AND event_id = e.id) AS userGoesToEvent,
@@ -37,7 +37,7 @@ async function getUserEvents(user_id) {
 
 async function getSavedEvents(user_id) {
     const conn = await db.connect()
-    const sql = `SELECT e.id, e.user_id, event_name, event_date, 
+    const sql = `SELECT e.id, e.user_id, latitude, longitude, event_name, event_date, 
     event_hour, address AS localization, description, photo, 
     (SELECT COUNT(*) FROM UserGoesToEvent WHERE event_id = e.id) AS participants,
     (SELECT COUNT(*) FROM UserGoesToEvent WHERE user_id = ? AND event_id = e.id) AS userGoesToEvent,
@@ -52,7 +52,7 @@ async function getSavedEvents(user_id) {
 
 async function getEvent(user_id, event_id) {
     const conn = await db.connect()
-    const sql = `SELECT e.id, e.user_id, event_name, event_date, 
+    const sql = `SELECT e.id, e.user_id, latitude, longitude, event_name, event_date, 
     event_hour, address AS localization, description, photo, 
     (SELECT COUNT(*) FROM UserGoesToEvent WHERE event_id = e.id) AS participants,
     (SELECT COUNT(*) FROM UserGoesToEvent WHERE user_id = ? AND event_id = e.id) AS userGoesToEvent,
