@@ -31,7 +31,7 @@ async function insertUserInRoom(roomId, userId) {
     conn.end()
 }
 
-async function getGroupMembers(room_id) {
+export async function getGroupMembers(room_id) {
     const conn = await db.connect()
     const sql = `SELECT nickname, profileImage, p.user_id FROM UserInTheRoom r 
                     JOIN Profile p ON p.user_id = r.user_id 

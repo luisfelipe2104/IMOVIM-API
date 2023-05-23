@@ -2,6 +2,7 @@ import db from '../services/chatService.js'
 import express from 'express'
 import { v4 as uuidv4 } from 'uuid'
 import { ChatModel } from '../../database/ChatSchema.js'
+import { getGroupMembers } from '../services/chatService.js'
 
 const routes = express.Router()
 
@@ -108,11 +109,31 @@ routes.post('/create-message', async (req, res) => {
 routes.get('/get-messages/:room', async (req, res) => {
     const room = req.params.room
     
+    let finalData = []
+    
     await ChatModel.find({room: room})
-    .then((data, err) => {
+    .then(async (data, err) => {
         if (err) return res.status(400).json({ msg: err})
 
-        return res.status(200).json(data)
+        const chatMembers = await getGroupMembers(room)
+
+        await data.map((msg) => {
+            chatMembers.map((member) => {
+                if (member.user_id == msg.author_id) {
+                    finalData.push({
+                        _id: msg._id,
+                        message: msg.message,
+                        author_id: msg.author_id,
+                        time: msg.time,
+                        room: msg.room,
+                        nickname: member.nickname,
+                        profileImage: member.profileImage
+                    })
+                }
+            })
+        })
+
+        return res.status(200).json(finalData)
     })
 })
 
