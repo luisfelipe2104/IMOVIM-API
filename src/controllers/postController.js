@@ -122,7 +122,9 @@ routes.post('/get-everything', async (req, res) => {
         const feedData = []
 
         for (let i = 0; i < postAmmount; i++) {
-            feedData.push(finalData[i])
+            if(finalData[i]) {
+                feedData.push(finalData[i])
+            }
         }
 
         return res.status(200).json(feedData)
