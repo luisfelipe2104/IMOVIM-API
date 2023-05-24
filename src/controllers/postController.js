@@ -123,7 +123,7 @@ routes.post('/get-everything', async (req, res) => {
         const feedData = []
 
         for (let i = 0; i < postAmmount; i++) {
-            if (finalData[i].post_type != 'event') {
+            if (await finalData[i].post_type != 'event') {
                 finalData[i].post_type = 'post'
             }
             feedData.push(finalData[i])
