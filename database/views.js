@@ -16,7 +16,7 @@ export const ProfileView = (userSeeingId) => {
 
 export const PostView = (complement, userIdParameter) => {
     const script = `
-    SELECT p.id, nickname, caption, image, p.created_at, user_id, updated,
+    SELECT p.id, post_type, nickname, caption, image, p.created_at, user_id, updated,
     (SELECT COUNT(*) FROM UserLikesPost WHERE post_id = p.id) AS likes, 
     (SELECT COUNT(*) FROM Comments WHERE post_id = p.id) AS comments, 
     (SELECT profileImage FROM Profile profile WHERE profile.user_id = p.user_id) AS profileImage, 

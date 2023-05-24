@@ -10,7 +10,7 @@ async function createEvent(user_id, event_name, event_date, event_hour, descript
 
 export async function getEvents(user_id) {
     const conn = await db.connect()
-    const sql = `SELECT e.id, e.created_at, nickname, e.user_id, latitude, longitude, event_name, event_date, 
+    const sql = `SELECT post_type, e.id, e.created_at, nickname, e.user_id, latitude, longitude, event_name, event_date, 
     event_hour, address AS localization, description, photo, 
     (SELECT COUNT(*) FROM UserGoesToEvent WHERE event_id = e.id) AS participants,
     (SELECT profileImage FROM Profile p WHERE e.user_id = p.user_id) AS profileImage,

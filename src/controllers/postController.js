@@ -108,7 +108,6 @@ routes.post('/get-everything', async (req, res) => {
         finalData = posts
         
         events.forEach((event) => {
-            event.post_type = "event"
             finalData.push(event)
         })
         
@@ -123,9 +122,6 @@ routes.post('/get-everything', async (req, res) => {
         const feedData = []
 
         for (let i = 0; i < postAmmount; i++) {
-            if (await finalData[i].post_type != 'event') {
-                finalData[i].post_type = 'post'
-            }
             feedData.push(finalData[i])
         }
 

@@ -63,6 +63,7 @@ CREATE TABLE IF NOT EXISTS Posts(
     localization varchar(100),
 	created_at datetime default now() not null,
 	image varchar(255),
+    post_type ENUM('post', 'event') DEFAULT 'post' NOT NULL,
     updated boolean default false
    
 );
@@ -145,6 +146,8 @@ CREATE TABLE IF NOT EXISTS Events(
     address varchar(255) not null,
     latitude float not null,
     longitude float not null,
+    post_type ENUM('post', 'event') DEFAULT 'event' NOT NULL,
+    created_at datetime default now() not null,
     
     constraint events_userID foreign key(user_id) references Users(id)
 );
