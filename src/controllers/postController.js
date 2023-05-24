@@ -71,7 +71,8 @@ routes.get('/get-posts-of-friends/:id', async (req, res) => {
         if(!posts.length) return res.status(200).json({ msg: "Não há posts de amigos" })
 
         posts.map((post) => {
-            post.created_at = relativeTime(post.created_at)
+            post.created_at = relativeTime(post.created_at),
+            post.post_type = 'post'
         })
 
         return res.status(200).json(posts)
