@@ -10,12 +10,15 @@ async function createEvent(user_id, event_name, event_date, event_hour, descript
 
 export async function getEvents(user_id) {
     const conn = await db.connect()
-    const sql = `SELECT e.id, e.created_at, e.user_id, latitude, longitude, event_name, event_date, 
+    const sql = `SELECT e.id, e.created_at, nickname, e.user_id, latitude, longitude, event_name, event_date, 
     event_hour, address AS localization, description, photo, 
     (SELECT COUNT(*) FROM UserGoesToEvent WHERE event_id = e.id) AS participants,
+    (SELECT profileImage FROM Profile p WHERE e.user_id = p.user_id) AS profileImage,
     (SELECT COUNT(*) FROM UserGoesToEvent WHERE user_id = ? AND event_id = e.id) AS userGoesToEvent,
     (SELECT COUNT(*) FROM SavedEvent WHERE user_id = ? AND event_id = e.id) AS userSavedEvent,
-    dayofweek(event_date) AS dayOfWeek FROM Events e`
+    dayofweek(event_date) AS dayOfWeek FROM Events e
+    JOIN Users u ON e.user_id = u.id
+    `
     const results = await conn.query(sql, [user_id, user_id])
     conn.end()
     return results[0]
