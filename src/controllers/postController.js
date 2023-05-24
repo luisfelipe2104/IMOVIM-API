@@ -2,6 +2,7 @@ import express from 'express';
 import db from '../services/postService.js';
 import relativeTime from '../helpers/relativeTime.js';
 import { getWhoCommentedOnPost } from '../services/commentService.js';
+import { getEvents } from '../services/eventService.js';
 
 const routes = express.Router();
 
@@ -90,6 +91,44 @@ routes.post('/get-all-posts', async (req, res) => {
         })
 
         return res.status(200).json(posts)
+    } catch (err) {
+        return res.status(500).json({ msg: err.message })
+    }
+})
+
+routes.post('/get-everything', async (req, res) => {
+    const { postAmmount, user_id } = req.body
+    try{
+        let finalData = []
+        let posts = await db.getAllPosts(parseInt(postAmmount), user_id)
+        let events = await getEvents(user_id)
+        
+        
+        finalData = posts
+        
+        events.forEach((event) => {
+            event.post_type = "event"
+            finalData.push(event)
+        })
+        
+        finalData.sort((a,b) => { 
+            return b.created_at - a.created_at 
+        });
+
+        finalData.map((i) => {
+            i.created_at = relativeTime(i.created_at)
+        })
+
+        const feedData = []
+
+        for (let i = 0; i < postAmmount; i++) {
+            if (finalData[i].post_type != 'event') {
+                finalData[i].post_type = 'post'
+            }
+            feedData.push(finalData[i])
+        }
+
+        return res.status(200).json(feedData)
     } catch (err) {
         return res.status(500).json({ msg: err.message })
     }

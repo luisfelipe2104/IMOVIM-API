@@ -8,9 +8,9 @@ async function createEvent(user_id, event_name, event_date, event_hour, descript
     conn.end()
 }
 
-async function getEvents(user_id) {
+export async function getEvents(user_id) {
     const conn = await db.connect()
-    const sql = `SELECT e.id, e.user_id, latitude, longitude, event_name, event_date, 
+    const sql = `SELECT e.id, e.created_at, e.user_id, latitude, longitude, event_name, event_date, 
     event_hour, address AS localization, description, photo, 
     (SELECT COUNT(*) FROM UserGoesToEvent WHERE event_id = e.id) AS participants,
     (SELECT COUNT(*) FROM UserGoesToEvent WHERE user_id = ? AND event_id = e.id) AS userGoesToEvent,
