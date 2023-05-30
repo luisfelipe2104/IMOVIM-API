@@ -85,6 +85,14 @@ export async function updatePost(post_id, user_id, caption, image) {
     await conn.end()
 }
 
+export async function updateCaption(post_id, user_id, caption) {
+    const conn = await db.connect()
+    const sql = 'UPDATE Posts SET caption =?, updated = true WHERE id =? AND user_id =?'
+    const data = [caption, post_id, user_id]
+    await conn.query(sql, data)
+    await conn.end()
+}
+
 export async function getPostsOfUser(user_id, userSeeingId) {
     const conn = await db.connect()
     const sql = `${PostView('WHERE user_id =?', userSeeingId)}`
@@ -133,6 +141,7 @@ export default {
     getPost, 
     getAllPosts, 
     updatePost, 
+    updateCaption,
     deletePost,
     getPostsOfUser, 
     likePost, 

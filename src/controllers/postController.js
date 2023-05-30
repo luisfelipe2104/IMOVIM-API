@@ -221,6 +221,17 @@ routes.post('/update-post', async (req, res) => {
     }
 })
 
+routes.put('/update-caption', async (req, res) => {
+    const { caption, post_id, user_id } = req.body
+    if (!caption || !post_id || !user_id) return res.status(400).json({ msg: "Insira todos os dados!" })
+    try {
+        await db.updateCaption(post_id, user_id, caption)
+        return res.status(200).json({ msg: "Legenda atualizada!" })
+    } catch (err) {
+        return res.status(400).json({ msg: err.message })
+    }
+})
+
 // post;/delete-post
 routes.post('/delete-post', async (req, res) => {
     const { post_id, user_id } = req.body
