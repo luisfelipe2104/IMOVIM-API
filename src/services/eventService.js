@@ -124,4 +124,14 @@ async function unsaveEvent(event_id, user_id) {
     conn.end()
 }
 
-export default { getSavedEvents, getEvent, checkUserSavedEvent, saveEvent, unsaveEvent, removeUserFromEvent, createEvent, getEvents, getUserEvents, goToEvent, checkUserGoesToEvent }
+async function updateEvent(event_id, user_id, event_name, event_date, event_hour, description, photo, address, latitude, longitude) {
+    const conn = await db.connect()
+    const sql = `UPDATE Events SET event_name = ?, event_date = ?, 
+    event_hour = ?, description = ?, photo = ?, address = ?, 
+    latitude = ?, longitude = ? WHERE event_id = ? AND user_id = ?`
+    const data = [event_name, event_date, event_hour, description, photo, address, latitude, longitude, event_id, user_id]
+    await conn.query(sql, data)
+    conn.end()
+}
+
+export default { updateEvent, getSavedEvents, getEvent, checkUserSavedEvent, saveEvent, unsaveEvent, removeUserFromEvent, createEvent, getEvents, getUserEvents, goToEvent, checkUserGoesToEvent }

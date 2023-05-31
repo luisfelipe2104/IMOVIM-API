@@ -25,4 +25,8 @@ routes.use("/event", eventRoutes)
 routes.use("/chat", chatRoutes)
 routes.use("/friendShip", friendShipRoutes)
 
+routes.get("/", (req, res) => {
+    res.send("Imovim Api")
+})
+
 export default routes
