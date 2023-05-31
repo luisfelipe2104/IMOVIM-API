@@ -73,6 +73,16 @@ routes.put('/update-event', async (req, res) => {
     }
 })
 
+routes.get('/get-users-who-go/:id', async (req, res) => {
+    const event_id = req.params.id
+    try {
+        const data = await db.getUsersWhoGo(event_id)
+        return res.status(200).json(data)
+    } catch (err) {
+        return res.status(400).json({ msg: err.message })
+    }
+})
+
 routes.get('/get-event/:user_id/:event_id', async (req, res) => {
     const user_id = req.params.user_id
     const event_id = req.params.event_id

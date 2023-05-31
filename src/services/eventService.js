@@ -53,6 +53,18 @@ async function getSavedEvents(user_id) {
     return results[0]
 }
 
+async function getUsersWhoGo(event_id) {
+    const conn = await db.connect()
+    const sql = `SELECT nickname, profileImage, g.user_id FROM UserGoesToEvent g
+    JOIN Profile p ON p.user_id = g.user_id
+    JOIN Users u ON u.id = g.user_id
+    WHERE g.event_id = ?`
+    const results = await conn.query(sql, [event_id])
+    
+    conn.end()
+    return results[0]
+}
+
 async function getEvent(user_id, event_id) {
     const conn = await db.connect()
     const sql = `SELECT e.id, e.user_id, nickname, latitude, longitude, event_name, event_date, 
@@ -130,8 +142,10 @@ async function updateEvent(event_id, user_id, event_name, event_date, event_hour
     event_hour = ?, description = ?, photo = ?, address = ?, 
     latitude = ?, longitude = ? WHERE id = ? AND user_id = ?`
     const data = [event_name, event_date, event_hour, description, photo, address, latitude, longitude, event_id, user_id]
-    await conn.query(sql, data)
+    const results = await conn.query(sql, data)
     conn.end()
+
+    return results[0]
 }
 
-export default { updateEvent, getSavedEvents, getEvent, checkUserSavedEvent, saveEvent, unsaveEvent, removeUserFromEvent, createEvent, getEvents, getUserEvents, goToEvent, checkUserGoesToEvent }
+export default { updateEvent, getUsersWhoGo, getSavedEvents, getEvent, checkUserSavedEvent, saveEvent, unsaveEvent, removeUserFromEvent, createEvent, getEvents, getUserEvents, goToEvent, checkUserGoesToEvent }
