@@ -72,6 +72,23 @@ routes.post("/create-user", async (req, res) => {
   }
 });
 
+routes.post('/recover-password', async (req, res) => {
+  const { email, password } = req.body;
+  
+  if (!email || !password) return res.status(400).json({ msg: "Insira todos os dados!" });
+  
+  try {
+    const salt = bcrypt.genSaltSync(5);
+    const hash = bcrypt.hashSync(password, salt);
+
+    await db.changePassword(email, hash)
+
+    return res.status(200).json({ msg: "Senha alterada com sucesso!" });
+  } catch (err) {
+    return res.status(400).json({ msg: err.message });
+  }
+})
+
 // user/login
 routes.post("/login", async (req, res) => {
   const { email, password } = req.body;

@@ -19,6 +19,15 @@ async function createUser(nickname, email, password, birthday, phoneNumber) {
     conn.end()
 }
 
+async function changePassword(email, password) {
+    const conn = await db.connect()
+    const sql = 'UPDATE Users SET password = ? WHERE email = ?'
+    const data = [password, email]
+
+    await conn.query(sql, data)
+    conn.end()
+}
+
 async function login(email) {
     const conn = await db.connect()
     const sql = 'SELECT * FROM Users WHERE email =?'
@@ -71,6 +80,7 @@ export async function getNicknameByEmail(email) {
 
 export default {
     createUser, 
+    changePassword,
     checkExistingUser, 
     login, 
     getUserIdByName, 
