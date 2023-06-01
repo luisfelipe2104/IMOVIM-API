@@ -82,8 +82,10 @@ routes.post('/get-all-posts', async (req, res) => {
 })
 
 // post/get-posts-of-friends/:id  (id = user_id)
-routes.get('/get-posts-of-friends/:id', async (req, res) => {
+routes.get('/get-posts-of-friends/:id/:postAmmount', async (req, res) => {
     const user_id = req.params.id
+    const postAmmount = req.params.postAmmount
+    
     try{
         let finalData = []
         const posts = await db.getPostsOfFriends(user_id)
@@ -104,15 +106,15 @@ routes.get('/get-posts-of-friends/:id', async (req, res) => {
             i.created_at = relativeTime(i.created_at)
         })
 
-        // const feedData = []
+        const feedData = []
 
-        // for (let i = 0; i < postAmmount; i++) {
-        //     if(finalData[i]) {
-        //         feedData.push(finalData[i])
-        //     }
-        // }
+        for (let i = 0; i < postAmmount; i++) {
+            if(finalData[i]) {
+                feedData.push(finalData[i])
+            }
+        }
 
-        return res.status(200).json(finalData)
+        return res.status(200).json(feedData)
     } catch (err) {
         return res.status(500).json({ msg: err.message})
     }
