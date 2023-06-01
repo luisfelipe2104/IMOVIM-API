@@ -3,6 +3,7 @@ import db from '../services/postService.js';
 import relativeTime from '../helpers/relativeTime.js';
 import { getWhoCommentedOnPost } from '../services/commentService.js';
 import { getEvents } from '../services/eventService.js';
+import { getFriendEvents } from '../services/eventService.js';
 
 const routes = express.Router();
 
@@ -63,23 +64,6 @@ routes.get('/get-num-likes/:id', async (req, res) => {
     }
 })
 
-// post/get-posts-of-friends/:id  (id = user_id)
-routes.get('/get-posts-of-friends/:id', async (req, res) => {
-    const user_id = req.params.id
-    try{
-        const posts = await db.getPostsOfFriends(user_id)
-        if(!posts.length) return res.status(200).json({ msg: "Não há posts de amigos" })
-
-        posts.map((post) => {
-            post.created_at = relativeTime(post.created_at),
-            post.post_type = 'post'
-        })
-
-        return res.status(200).json(posts)
-    } catch (err) {
-        return res.status(500).json({ msg: err.message})
-    }
-})
 
 // post/get-all-posts
 routes.post('/get-all-posts', async (req, res) => {
@@ -94,6 +78,43 @@ routes.post('/get-all-posts', async (req, res) => {
         return res.status(200).json(posts)
     } catch (err) {
         return res.status(500).json({ msg: err.message })
+    }
+})
+
+// post/get-posts-of-friends/:id  (id = user_id)
+routes.get('/get-posts-of-friends/:id', async (req, res) => {
+    const user_id = req.params.id
+    try{
+        let finalData = []
+        const posts = await db.getPostsOfFriends(user_id)
+        const events = await getFriendEvents(user_id)
+
+        
+        finalData = posts
+        
+        events.forEach((event) => {
+            finalData.push(event)
+        })
+        
+        finalData.sort((a,b) => { 
+            return b.created_at - a.created_at 
+        });
+        
+        finalData.map((i) => {
+            i.created_at = relativeTime(i.created_at)
+        })
+
+        // const feedData = []
+
+        // for (let i = 0; i < postAmmount; i++) {
+        //     if(finalData[i]) {
+        //         feedData.push(finalData[i])
+        //     }
+        // }
+
+        return res.status(200).json(finalData)
+    } catch (err) {
+        return res.status(500).json({ msg: err.message})
     }
 })
 
@@ -114,7 +135,7 @@ routes.post('/get-everything', async (req, res) => {
         finalData.sort((a,b) => { 
             return b.created_at - a.created_at 
         });
-
+        
         finalData.map((i) => {
             i.created_at = relativeTime(i.created_at)
         })

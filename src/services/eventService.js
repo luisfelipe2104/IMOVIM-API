@@ -82,6 +82,26 @@ async function getEvent(user_id, event_id) {
     return results[0]
 }
 
+export async function getFriendEvents(user_id) {
+    const conn = await db.connect()
+    const sql = `SELECT e.id, e.post_type, e.user_id, e.created_at, nickname, latitude, longitude, event_name, event_date, 
+    event_hour, address AS localization, description, photo, 
+    (SELECT COUNT(*) FROM UserGoesToEvent WHERE event_id = e.id) AS participants,
+    (SELECT profileImage FROM Profile p WHERE e.user_id = p.user_id) AS profileImage,
+    (SELECT COUNT(*) FROM UserGoesToEvent WHERE user_id = ? AND event_id = e.id) AS userGoesToEvent,
+    (SELECT COUNT(*) FROM SavedEvent WHERE user_id = ? AND event_id = e.id) AS userSavedEvent,
+    dayofweek(event_date) AS dayOfWeek FROM Events e 
+    JOIN Users u ON e.user_id = u.id 
+    WHERE e.user_id IN (SELECT friend1 FROM Friendship WHERE friend1 = ?
+        OR friend2 = ? AND pending = false) OR e.user_id IN
+        (SELECT friend2 FROM Friendship WHERE friend1 = ?
+            OR friend2 = ? AND pending = false)`
+    const results = await conn.query(sql, [user_id, user_id, user_id, user_id, user_id, user_id])
+
+    conn.end()
+    return results[0]
+}
+
 async function checkUserGoesToEvent(event_id, user_id) {
     const conn = await db.connect()
     const sql = 'SELECT COUNT(*) as userGoes FROM UserGoesToEvent WHERE event_id = ? AND user_id = ?'
@@ -148,4 +168,4 @@ async function updateEvent(event_id, user_id, event_name, event_date, event_hour
     return results[0]
 }
 
-export default { updateEvent, getUsersWhoGo, getSavedEvents, getEvent, checkUserSavedEvent, saveEvent, unsaveEvent, removeUserFromEvent, createEvent, getEvents, getUserEvents, goToEvent, checkUserGoesToEvent }
+export default { getFriendEvents, updateEvent, getUsersWhoGo, getSavedEvents, getEvent, checkUserSavedEvent, saveEvent, unsaveEvent, removeUserFromEvent, createEvent, getEvents, getUserEvents, goToEvent, checkUserGoesToEvent }
