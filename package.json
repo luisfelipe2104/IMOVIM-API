@@ -26,7 +26,7 @@
     "moment": "^2.29.4",
     "mongoose": "^6.6.5",
     "mysql2": "^2.3.3",
-    "nodemailer": "^6.9.1",
+    "nodemailer": "^6.9.3",
     "uuid": "^9.0.0",
     "validate-date": "^2.0.0"
   },
