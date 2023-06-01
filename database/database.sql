@@ -64,6 +64,7 @@ CREATE TABLE IF NOT EXISTS Posts(
 	created_at datetime default now() not null,
 	image varchar(255),
     post_type ENUM('post', 'event') DEFAULT 'post' NOT NULL,
+    available boolean default true,
     updated boolean default false
    
 );
@@ -146,6 +147,7 @@ CREATE TABLE IF NOT EXISTS Events(
     address varchar(255) not null,
     latitude float not null,
     longitude float not null,
+    available boolean default true,
     post_type ENUM('post', 'event') DEFAULT 'event' NOT NULL,
     created_at datetime default now() not null,
     
