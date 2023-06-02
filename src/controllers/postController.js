@@ -203,7 +203,7 @@ routes.get('/get-post-notifications/:id', async (req, res) => {
         usersWhoLiked = usersWhoLiked.map((i) => {
             const data = { 
                 ...i,
-                text: `${i.nickname} curtiu sua postagem` 
+                text: `curtiu sua postagem`
             }
             notifications.push(data)
             return data
@@ -213,7 +213,7 @@ routes.get('/get-post-notifications/:id', async (req, res) => {
         usersWhoCommented = usersWhoCommented.map((i) => {
             const data = { 
                 ...i,
-                text: `${i.nickname} comentou em sua postagem` 
+                text: `comentou em sua postagem` 
             }
             notifications.push(data)
             return data

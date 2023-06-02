@@ -157,7 +157,8 @@ CREATE TABLE IF NOT EXISTS Events(
 CREATE TABLE IF NOT EXISTS UserGoesToEvent(
 	id int not null primary key auto_increment,
 	event_id int not null,
-	user_id int not null
+	user_id int not null,
+    created_at datetime default now() not null
 );
 
 CREATE TABLE IF NOT EXISTS SavedEvent(
