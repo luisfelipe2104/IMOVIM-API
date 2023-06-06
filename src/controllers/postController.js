@@ -3,7 +3,7 @@ import db from '../services/postService.js';
 import relativeTime from '../helpers/relativeTime.js';
 import { getWhoCommentedOnPost } from '../services/commentService.js';
 import { getEvents } from '../services/eventService.js';
-import { getFriendEvents } from '../services/eventService.js';
+import { getFriendEvents, getUsersWhoGo } from '../services/eventService.js';
 
 const routes = express.Router();
 
@@ -214,6 +214,16 @@ routes.get('/get-post-notifications/:id', async (req, res) => {
             const data = { 
                 ...i,
                 text: `comentou em sua postagem` 
+            }
+            notifications.push(data)
+            return data
+        })
+
+        let eventNotifications = await getUsersWhoGo(user_id)
+        eventNotifications = eventNotifications.map((i) => {
+            const data = {
+                ...i, 
+                text: "vai no seu evento",
             }
             notifications.push(data)
             return data

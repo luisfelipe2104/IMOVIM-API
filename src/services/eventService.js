@@ -53,13 +53,15 @@ async function getSavedEvents(user_id) {
     return results[0]
 }
 
-async function getUsersWhoGo(event_id) {
+export async function getUsersWhoGo(user_id) {
     const conn = await db.connect()
-    const sql = `SELECT nickname, profileImage, g.user_id, g.created_at FROM UserGoesToEvent g
+    const sql = `SELECT g.id, nickname, profileImage, g.user_id, g.created_at FROM UserGoesToEvent g
     JOIN Profile p ON p.user_id = g.user_id
     JOIN Users u ON u.id = g.user_id
-    WHERE g.event_id = ?`
-    const results = await conn.query(sql, [event_id])
+    WHERE g.event_id IN (SELECT userGoes.event_id FROM UserGoesToEvent userGoes)
+    AND g.event_id IN (SELECT e.id FROM Events e WHERE e.user_id = ? AND e.id = g.event_id)
+    `
+    const results = await conn.query(sql, [user_id, user_id])
     
     conn.end()
     return results[0]
