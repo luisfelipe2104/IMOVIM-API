@@ -190,3 +190,12 @@ CREATE TABLE IF NOT EXISTS UserInTheRoom(
 INSERT INTO UserInTheRoom(room_id, user_id) values
 (1, 3);
 
+CREATE TABLE IF NOT EXISTS Report(
+    id int primary key auto_increment,
+    post_id int not null,
+    user_id int not null,
+    victim_id int not null,
+    created_at datetime default now(),
+    motive varchar(50) not null,
+    status enum('ignored', 'solved') default 'ignored'
+);

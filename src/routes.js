@@ -9,6 +9,7 @@ import eventRoutes from "./controllers/eventController.js"
 import chatRoutes from "./controllers/chatController.js"
 import friendShipRoutes from "./controllers/friendController.js"
 import blockRoutes from "./controllers/blockController.js"
+import reportRoutes from "./controllers/reportController.js"
 import emailRoutes from "./mailer/send.js"
 
 const routes = express()
@@ -24,5 +25,6 @@ routes.use("/sports", sportsRoutes)
 routes.use("/event", eventRoutes)
 routes.use("/chat", chatRoutes)
 routes.use("/friendShip", friendShipRoutes)
+routes.use("/report", reportRoutes)
 
 export default routes
