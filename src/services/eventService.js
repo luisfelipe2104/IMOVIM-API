@@ -159,6 +159,14 @@ async function unsaveEvent(event_id, user_id) {
     conn.end()
 }
 
+async function removeEvent(event_id, user_id) {
+    const conn = await db.connect()
+    const sql = 'UPDATE Events SET available = false WHERE id = ? AND user_id = ?'
+    const data = [event_id, user_id]
+    await conn.query(sql, data)
+    conn.end()
+}
+
 async function updateEvent(event_id, user_id, event_name, event_date, event_hour, description, photo, address, latitude, longitude) {
     const conn = await db.connect()
     const sql = `UPDATE Events SET event_name = ?, event_date = ?, 
@@ -171,4 +179,4 @@ async function updateEvent(event_id, user_id, event_name, event_date, event_hour
     return results[0]
 }
 
-export default { getFriendEvents, updateEvent, getUsersWhoGo, getSavedEvents, getEvent, checkUserSavedEvent, saveEvent, unsaveEvent, removeUserFromEvent, createEvent, getEvents, getUserEvents, goToEvent, checkUserGoesToEvent }
+export default { removeEvent, getFriendEvents, updateEvent, getUsersWhoGo, getSavedEvents, getEvent, checkUserSavedEvent, saveEvent, unsaveEvent, removeUserFromEvent, createEvent, getEvents, getUserEvents, goToEvent, checkUserGoesToEvent }

@@ -182,6 +182,17 @@ routes.post('/go-to-event', async (req, res) => {
     }
 })
 
+routes.delete('/delete-event/:id/user_id', async(req, res) => {
+    const { id, user_id } = req.params
+    
+    try {
+        await db.removeEvent(id, user_id)
+        return res.status(200).json({ msg: 'Evento removido!' })
+    } catch (err) {
+        return res.status(400).json({ msg: err.message })
+    }
+})
+
 routes.post('/save-event', async (req, res) => {
     const { user_id, event_id } = req.body
 
