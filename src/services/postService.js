@@ -51,7 +51,7 @@ async function getLikeList(post_id) {
 export async function getAllPosts(ammount, user_id) {
     const conn = await db.connect()
     // const sql = 'SELECT p.id, nickname, caption, image, p.created_at, (SELECT COUNT(*) FROM UserLikesPost WHERE post_id = p.id) AS likes FROM Posts p JOIN Users u ON u.id = user_id ORDER BY likes DESC'
-    const sql = `${PostView(`WHERE p.user_id NOT IN (SELECT blocked_user_id FROM BlockedUser b WHERE b.user_id = ${user_id}) AND p.user_id NOT IN (SELECT b.user_id FROM BlockedUser b WHERE blocked_user_id = ${user_id})`, user_id)}`
+    const sql = `${PostView(`WHERE available = true and p.user_id NOT IN (SELECT blocked_user_id FROM BlockedUser b WHERE b.user_id = ${user_id}) AND p.user_id NOT IN (SELECT b.user_id FROM BlockedUser b WHERE blocked_user_id = ${user_id})`, user_id)}`
     const rows = await conn.query(sql, [ammount])
     conn.end()
     return rows[0]
@@ -60,7 +60,7 @@ export async function getAllPosts(ammount, user_id) {
 export async function getPostsOfFriends(user_id) {
     const conn = await db.connect()
     // const sql = 'SELECT p.id, nickname, caption, image, p.created_at, (SELECT COUNT(*) FROM UserLikesPost WHERE post_id = p.id) AS likes FROM Posts p JOIN Users u ON u.id = user_id WHERE user_id IN (SELECT user_id FROM UserFollowing WHERE follower_id = ?) ORDER BY likes DESC'
-    const sql = `${PostView(`WHERE p.user_id IN (SELECT friend1 FROM Friendship WHERE friend1 = ${user_id}
+    const sql = `${PostView(`WHERE available = true and p.user_id IN (SELECT friend1 FROM Friendship WHERE friend1 = ${user_id}
                     OR friend2 = ${user_id} AND pending = false) OR p.user_id IN
                     (SELECT friend2 FROM Friendship WHERE friend1 = ${user_id}
                         OR friend2 = ${user_id} AND pending = false)`, user_id)}`
@@ -71,7 +71,7 @@ export async function getPostsOfFriends(user_id) {
 
 export async function deletePost(post_id, user_id) {
     const conn = await db.connect()
-    const sql = 'DELETE FROM Posts WHERE id =? AND user_id =?'
+    const sql = 'UPDATE Posts SET available = false WHERE id =? AND user_id =?'
     const data = [post_id, user_id]
     await conn.query(sql, data)
     await conn.end()
@@ -95,7 +95,7 @@ export async function updateCaption(post_id, user_id, caption) {
 
 export async function getPostsOfUser(user_id, userSeeingId) {
     const conn = await db.connect()
-    const sql = `${PostView('WHERE user_id =?', userSeeingId)}`
+    const sql = `${PostView('WHERE available = true and user_id =?', userSeeingId)}`
     const data = [user_id]
     const rows = await conn.query(sql, data)
     conn.end()

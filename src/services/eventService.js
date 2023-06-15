@@ -18,6 +18,7 @@ export async function getEvents(user_id) {
     (SELECT COUNT(*) FROM SavedEvent WHERE user_id = ? AND event_id = e.id) AS userSavedEvent,
     dayofweek(event_date) AS dayOfWeek FROM Events e
     JOIN Users u ON e.user_id = u.id
+    WHERE available = true
     `
     const results = await conn.query(sql, [user_id, user_id])
     conn.end()
@@ -31,7 +32,7 @@ async function getUserEvents(user_id) {
     (SELECT COUNT(*) FROM UserGoesToEvent WHERE event_id = e.id) AS participants,
     (SELECT COUNT(*) FROM UserGoesToEvent WHERE user_id = ? AND event_id = e.id) AS userGoesToEvent,
     (SELECT COUNT(*) FROM SavedEvent WHERE user_id = ? AND event_id = e.id) AS userSavedEvent,
-    dayofweek(event_date) AS dayOfWeek FROM Events e WHERE user_id = ?`
+    dayofweek(event_date) AS dayOfWeek FROM Events e WHERE available = true AND user_id = ?`
     const results = await conn.query(sql, [user_id, user_id, user_id])
 
     conn.end()
@@ -45,7 +46,7 @@ async function getSavedEvents(user_id) {
     (SELECT COUNT(*) FROM UserGoesToEvent WHERE event_id = e.id) AS participants,
     (SELECT COUNT(*) FROM UserGoesToEvent WHERE user_id = ? AND event_id = e.id) AS userGoesToEvent,
     (SELECT COUNT(*) FROM SavedEvent WHERE user_id = ? AND event_id = e.id) AS userSavedEvent,
-    dayofweek(event_date) AS dayOfWeek FROM SavedEvent s JOIN Events e ON event_id = e.id WHERE s.user_id = ?`
+    dayofweek(event_date) AS dayOfWeek FROM SavedEvent s JOIN Events e ON event_id = e.id WHERE available = true AND s.user_id = ?`
     const data = [user_id, user_id, user_id]
     const results = await conn.query(sql, data)
 
@@ -94,7 +95,7 @@ export async function getFriendEvents(user_id) {
     (SELECT COUNT(*) FROM SavedEvent WHERE user_id = ? AND event_id = e.id) AS userSavedEvent,
     dayofweek(event_date) AS dayOfWeek FROM Events e 
     JOIN Users u ON e.user_id = u.id 
-    WHERE e.user_id IN (SELECT friend1 FROM Friendship WHERE friend1 = ?
+    WHERE available = true AND e.user_id IN (SELECT friend1 FROM Friendship WHERE friend1 = ?
         OR friend2 = ? AND pending = false) OR e.user_id IN
         (SELECT friend2 FROM Friendship WHERE friend1 = ?
             OR friend2 = ? AND pending = false)`
