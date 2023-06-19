@@ -14,7 +14,7 @@ routes.post('/create-event', async (req, res) => {
     // console.log(marker[0].latitude)
     // console.log(marker[0].longitude)
     try {
-        if (!marker) {
+        if (marker.length == 0) {
             if (localization) {
                 const cep = localization
                 await axios.get(`https://viacep.com.br/ws/${cep}/json/`)
