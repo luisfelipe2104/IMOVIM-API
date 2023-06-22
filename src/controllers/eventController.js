@@ -59,6 +59,17 @@ routes.post('/create-event', async (req, res) => {
     }
 })
 
+routes.delete('/delete-event/:event_id/:user_id', async (req, res) => {
+    const { event_id, user_id } = req.params
+
+    try {
+        await db.removeEvent(event_id, user_id)
+        return res.status(200).json({ msg: "Evento deletado!" })
+    } catch (err) {
+        return res.status(400).json({ msg: err.message })
+    }
+})
+
 routes.put('/update-event', async (req, res) => {
     const { user_id, event_id, event_name, event_date, event_hour, description, photo, marker } = req.body;
     if (!user_id  || !event_id || !event_name || !event_date || !event_hour || !description || !photo || !marker) {
