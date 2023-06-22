@@ -59,6 +59,16 @@ routes.post('/create-event', async (req, res) => {
     }
 })
 
+routes.get('/get-friend-events/:user_id', async (req, res) => {
+    const { user_id } = req.params
+    try {
+        const data = await db.getFriendEvents(user_id)
+        return res.status(200).json(data)
+    } catch (err) {
+        return res.status(400).json({ msg: err.message })
+    }
+})
+
 routes.delete('/delete-event/:event_id/:user_id', async (req, res) => {
     const { event_id, user_id } = req.params
 
