@@ -106,6 +106,17 @@ routes.post('/create-message', async (req, res) => {
     }
 })
 
+routes.delete('/remove-message/:id', async (req, res) => {
+    const { id } = req.params
+
+    try {
+        await ChatModel.findByIdAndRemove(id).exec()
+        return res.status(200).json({ msg: 'Mensagem deletada!'})
+    } catch (err) {
+        return res.status(400).json({ msg: err.message })
+    }
+})
+
 routes.get('/get-messages/:room', async (req, res) => {
     const room = req.params.room
     
