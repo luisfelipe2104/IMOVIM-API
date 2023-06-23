@@ -106,6 +106,16 @@ routes.post('/create-message', async (req, res) => {
     }
 })
 
+routes.delete(`/exit-room/:room_id/:user_id`, async (req, res) => {
+    const { room_id, user_id } = req.params
+    try {
+        await db.exitRoom(room_id, user_id)
+        return res.status(200).json({ msg: 'Você saiu do grupo!'})
+    } catch (err) {
+        return res.status(400).json({ msg: err.message })
+    }
+})
+
 routes.delete('/remove-message/:id', async (req, res) => {
     const { id } = req.params
 

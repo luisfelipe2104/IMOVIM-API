@@ -51,6 +51,13 @@ async function deleteMessages(room_id) {
     conn.end()
 }
 
+async function exitRoom(room_id, user_id) {
+    const conn = await db.connect()
+    const sql = `DELETE FROM UserInTheRoom WHERE room_id = ? AND user_id = ?`
+    await conn.query(sql, [room_id, user_id])
+    conn.end()
+}
+
 async function getUsersRoom(user_id) {
     const conn = await db.connect()
     const sql = `
@@ -76,4 +83,4 @@ async function getUsersRoom(user_id) {
     return result[0]
 }
 
-export default { getGroupMembers, createRoom, findUsersRoom, insertUserInRoom, getUsersRoom, deleteMessages, createGroupRoom }
+export default { exitRoom, getGroupMembers, createRoom, findUsersRoom, insertUserInRoom, getUsersRoom, deleteMessages, createGroupRoom }
