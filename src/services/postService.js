@@ -61,7 +61,7 @@ export async function getPostsOfFriends(user_id) {
     const conn = await db.connect()
     // const sql = 'SELECT p.id, nickname, caption, image, p.created_at, (SELECT COUNT(*) FROM UserLikesPost WHERE post_id = p.id) AS likes FROM Posts p JOIN Users u ON u.id = user_id WHERE user_id IN (SELECT user_id FROM UserFollowing WHERE follower_id = ?) ORDER BY likes DESC'
     const sql = `${PostView(`WHERE available = true and p.user_id IN (SELECT friend1 FROM Friendship WHERE friend1 = ${user_id}
-                    OR friend2 = ${user_id} AND pending = false) OR p.user_id IN
+                    OR friend2 = ${user_id} AND pending = false) AND p.user_id IN
                     (SELECT friend2 FROM Friendship WHERE friend1 = ${user_id}
                         OR friend2 = ${user_id} AND pending = false)`, user_id)}`
     const rows = await conn.query(sql, [user_id])
