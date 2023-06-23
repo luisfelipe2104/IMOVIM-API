@@ -96,7 +96,7 @@ export async function getFriendEvents(user_id) {
     dayofweek(event_date) AS dayOfWeek FROM Events e 
     JOIN Users u ON e.user_id = u.id 
     WHERE available = true AND e.user_id IN (SELECT friend1 FROM Friendship WHERE friend1 = ?
-        OR friend2 = ? AND pending = false) OR e.user_id IN
+        OR friend2 = ? AND pending = false) AND e.user_id IN
         (SELECT friend2 FROM Friendship WHERE friend1 = ?
             OR friend2 = ? AND pending = false)`
     const results = await conn.query(sql, [user_id, user_id, user_id, user_id, user_id, user_id])
