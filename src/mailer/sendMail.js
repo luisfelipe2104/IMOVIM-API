@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer";
 import { config } from "dotenv";
 
-config()
+config();
 
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
@@ -12,15 +12,25 @@ const transporter = nodemailer.createTransport({
         pass: process.env.EMAIL_PWD_APP
     },
     tls: {
-      rejectUnauthorized: false
+        // Necessário para evitar erros de certificado em alguns ambientes de desenvolvimento
+        rejectUnauthorized: false 
     }
-  })
+});
 
-  export const sendMailText = async (to, subject, html) => {
-      transporter.sendMail({
-        from: process.env.EMAIL_USER,
-        to,
-        subject,
-        html
-      })
-  } 
+export const sendMailText = async (to, subject, html) => {
+    try {
+        const info = await transporter.sendMail({
+            from: `"Imovim System" <${process.env.EMAIL_USER}>`,
+            to,
+            subject,
+            html
+        });
+
+        console.log("✅ Email enviado. ID:", info.messageId);
+        return true;
+
+    } catch (error) {
+        console.error("❌ Erro ao enviar email:", error);
+        return false;
+    }
+}
