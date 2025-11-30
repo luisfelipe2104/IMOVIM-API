@@ -5,15 +5,14 @@ config();
 
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
+    port: 587,            // <--- MUDANÇA: Porta mais compatível com Vercel
+    secure: false,        // <--- MUDANÇA: false é obrigatório para porta 587
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PWD_APP
     },
     tls: {
-        // Necessário para evitar erros de certificado em alguns ambientes de desenvolvimento
-        rejectUnauthorized: false 
+        rejectUnauthorized: false
     }
 });
 
@@ -30,7 +29,7 @@ export const sendMailText = async (to, subject, html) => {
         return true;
 
     } catch (error) {
-        console.error("❌ Erro ao enviar email:", error);
+        console.error("❌ Erro ao enviar email (Log Vercel):", error);
         return false;
     }
 }
